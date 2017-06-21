@@ -126,9 +126,15 @@ $("#category-list").on('click', '.category', function( event ) {
   }
 });
 
-$("#block-list").on('hover', '.block', function( event ) {
-  // do something on hover
-  // probably play audio
+// $("#block-list").on('hover', '.block', function( event ) {
+//   // do something on hover
+//   // probably play audio
+//   alert("Hover!");
+//   sounds.identifyblock.play();
+// });
+
+$("#block-list").on('focus', '.block', function( event ) {
+  // do something on focus
   sounds.identifyblock.play();
 });
 
