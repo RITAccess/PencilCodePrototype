@@ -2,7 +2,9 @@
 <html>
 <head>
   <title>Accessible PencilCode Foundation</title>
+  <!-- Twitter Bootstrap CSS [3.3.7] (Bootstrap CDN) +SRI -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="client.css">
 </head>
 <body lang="en">
   <div class="container">
@@ -12,26 +14,34 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <div class="well">
           <!-- Block selection -->
           <h2>Block selection</h2>
-          <ul class="nav nav-pills nav-stacked" id="category-list">
-            <li role="presentation" class="category category-active active" id="category-1" aria-controls="move" role="tab" data-toggle="tab"><a href="#">Move</a></li>
-            <li role="presentation" class="category" id="category-2" aria-controls="art" role="tab" data-toggle="tab"><a href="#">Art</a></li>
-            <li role="presentation" class="category" id="category-3" aria-controls="text" role="tab" data-toggle="tab"><a href="#">Text</a></li>
-            <li role="presentation" class="category" id="category-4" aria-controls="sound" role="tab" data-toggle="tab"><a href="#">Sound</a></li>
-            <li role="presentation" class="category" id="category-5" aria-controls="control" role="tab" data-toggle="tab"><a href="#">Control</a></li>
-            <li role="presentation" class="category" id="category-6" aria-controls="operators" role="tab" data-toggle="tab"><a href="#">Operators</a></li>
-            <li role="presentation" class="category" id="category-7" aria-controls="sprites" role="tab" data-toggle="tab"><a href="#">Sprites</a></li>
-            <li role="presentation" class="category" id="category-8" aria-controls="snippets" role="tab" data-toggle="tab"><a href="#">Snippets</a></li>
-          </ul>
+          <div class="row" id="category-list">
+            <div class="col-sm-6">
+              <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" class="category category-active active" id="category-1" aria-controls="move" role="tab" data-toggle="tab"><a href="#">Move</a></li>
+                <li role="presentation" class="category" id="category-2" aria-controls="art" role="tab" data-toggle="tab"><a href="#">Art</a></li>
+                <li role="presentation" class="category" id="category-3" aria-controls="text" role="tab" data-toggle="tab"><a href="#">Text</a></li>
+                <li role="presentation" class="category" id="category-4" aria-controls="sound" role="tab" data-toggle="tab"><a href="#">Sound</a></li>
+              </ul>
+            </div><!-- .col-sm-6 -->
+            <div class="col-sm-6">
+              <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" class="category" id="category-5" aria-controls="control" role="tab" data-toggle="tab"><a href="#">Control</a></li>
+                <li role="presentation" class="category" id="category-6" aria-controls="operators" role="tab" data-toggle="tab"><a href="#">Operators</a></li>
+                <li role="presentation" class="category" id="category-7" aria-controls="sprites" role="tab" data-toggle="tab"><a href="#">Sprites</a></li>
+                <li role="presentation" class="category" id="category-8" aria-controls="snippets" role="tab" data-toggle="tab"><a href="#">Snippets</a></li>
+              </ul>
+            </div><!-- .col-sm-6 -->
+          </div> <!-- .row #category-list -->
           <hr />
           <ul class="nav nav-pills nav-stacked" id="block-list">
           </ul>
         </div>
       </div><!-- .col-sm-4 -->
-      <div class="col-sm-8">
+      <div class="col-sm-9">
         <div class="well">
           <!-- Code navigation -->
           <h2>Code navigation</h2>
@@ -39,8 +49,16 @@
       </div><!-- .col-sm-8 -->
     </div><!-- .row -->
   </div><!-- .container -->
+  <!-- jQuery [3.2.1] (Google Hosted Libraries) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Twitter Bootstrap [3.3.7] (Bootstrap CDN) +SRI -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- howler.js [2.0.4] (CDNJS) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.min.js"></script>
   <script src="client.js"></script>
+  <script>
+    // show "Move" blocks on page load (jQuery.ready();)
+    $(update_block_list( 'category-1' ));
+  </script>
 </body>
 </html>
