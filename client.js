@@ -2,6 +2,8 @@
  * Client JS for Accessible PencilCode Foundation
 */
 
+// ------- Data ------- \\
+
 var blocks_move = [
   {
     name: 'fd',
@@ -84,8 +86,16 @@ var sounds = {
   }),
   selectblock: new Howl({
     src: ['assets/SelectBlock.m4a']
+  }),
+  identifycategory: new Howl({
+    src: ['assets/IdentifyCategory.m4a']
+  }),
+  selectcategory: new Howl({
+    src: ['assets/SelectCategory_short.m4a']
   })
 };
+
+// ------- Functions ------ \\
 
 function update_block_list( category_id_full ) {
   var category_id = category_id_full.substring(9);
@@ -107,6 +117,12 @@ function update_block_list( category_id_full ) {
 
 }
 
+// ------- jQuery ------- \\
+
+$("#category-list").on('focus', '.category', function( event ) {
+  sounds.identifycategory.play();
+})
+
 /*
  * Bootstrap jQuery list selection
  * @author Jeffrey Wang
@@ -114,6 +130,7 @@ function update_block_list( category_id_full ) {
 */
 
 $("#category-list").on('click', '.category', function( event ) {
+  sounds.selectcategory.play();
   if ( !$(this).hasClass("active") ) {
     $(".category").each(function(index, el) {
       if ( $(el).hasClass("category-active") ) {
