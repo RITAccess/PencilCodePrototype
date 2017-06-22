@@ -174,7 +174,30 @@ var sounds = {
     })
   },
   spearcon: {
-
+    'category-link-1': new Howl({
+      src: ['assets/spearcon_category_move.mp3']
+    }),
+    'category-link-2': new Howl({
+      src: ['assets/spearcon_category_art.mp3']
+    }),
+    'category-link-3': new Howl({
+      src: ['assets/spearcon_category_text.mp3']
+    }),
+    'category-link-4': new Howl({
+      src: ['assets/spearcon_category_sound.mp3']
+    }),
+    'category-link-5': new Howl({
+      src: ['assets/spearcon_category_control.mp3']
+    }),
+    'category-link-6': new Howl({
+      src: ['assets/spearcon_category_operators.mp3']
+    }),
+    'category-link-7': new Howl({
+      src: ['assets/spearcon_category_sprites.mp3']
+    }),
+    'category-link-8': new Howl({
+      src: ['assets/spearcon_category_snippets.mp3']
+    })
   }
 };
 
@@ -215,6 +238,8 @@ function play( sound, name ) {
     // if ( sound.indexOf('select') == -1 ) { // don't play when selecting
       sounds['speech'][name].play();
     // }
+  } else if ( method == 'spearcon' ) {
+    sounds['spearcon'][name].play();
   }
 }
 
