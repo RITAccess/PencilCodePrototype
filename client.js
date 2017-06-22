@@ -223,7 +223,7 @@ function update_block_list( category_id_full ) {
   for ( var i = 0; i < blocks.length; i++ ) {
     var params = '';
     for ( var j = 0; j < blocks[i].params.length; j++ ) {
-      params += ' <code>' + blocks[i].params[0] + '</code>';
+      params += ' <code>' + blocks[i].params[j] + '</code>';
     }
     block_html_insert += '<li role="presentation" class="block" id="block-' + blocks[i].name + '" alt="' + blocks[i].desc + '"><a href="#" aria-label="' + blocks[i].desc + '">' + blocks[i].name + ' ' + params + '</a></li>';
   }
