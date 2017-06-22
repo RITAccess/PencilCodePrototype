@@ -209,7 +209,6 @@ function update_block_list( category_id_full ) {
 
 function play( sound, name ) {
   var method = get_auditory_method();
-  console.log(name);
   if ( method == 'earcon' ) {
     sounds['earcon'][sound].play();
   } else if ( method == 'speech' ) {
@@ -233,7 +232,6 @@ $("#category-list").on('focus', '.category', function( event ) {
 
 $("#category-list").on('click', '.category', function( event ) {
   play('selectcategory', $(this).attr('id').substring(0,8) + "-link-" + $(this).attr('id').substring(9));
-  console.log($(this).attr('id'));
   if ( !$(this).hasClass("active") ) {
     $(".category").each(function(index, el) {
       if ( $(el).hasClass("category-active") ) {
@@ -246,19 +244,19 @@ $("#category-list").on('click', '.category', function( event ) {
   }
 });
 
-// $("#block-list").on('hover', '.block', function( event ) {
-//   // do something on hover
-//   // probably play audio
-//   alert("Hover!");
-//   sounds.identifyblock.play();
-// });
-
 $("#block-list").on('focus', '.block', function( event ) {
   // do something on focus
-  play('identifyblock');
+  play('identifyblock', null);
+  $(':focus').parent().addClass('active');
+});
+
+$("#block-list").on('focusout', '.block', function( event ) {
+  // do something on focusout
+  console.log($(this).attr('id'));
+  $(this).removeClass('active');
 });
 
 $("#block-list").on('click', '.block', function( event ) {
   // do something on click
-  play('selectblock');
+  play('selectblock', null);
 });
