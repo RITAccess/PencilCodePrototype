@@ -49,14 +49,14 @@
           </div> <!-- .row #category-list -->
           <hr />
           <h3>Blocks</h3>
-          <ul class="nav nav-pills nav-stacked" id="block-list">
-          </ul>
+          <ul class="nav nav-pills nav-stacked" id="block-list"></ul>
         </div>
       </div><!-- .col-sm-4 -->
       <div class="col-sm-9">
         <div class="well">
           <!-- Code navigation -->
           <h2>Code navigation</h2>
+          <ul class="nav nav-pills nav-stacked" id="program-sequence"></ul>
         </div>
       </div><!-- .col-sm-8 -->
     </div><!-- .row -->
@@ -71,6 +71,7 @@
   <script>
     // show "Move" blocks on page load (jQuery.ready();)
     $(update_block_list( 'category-1' ));
+    $(update_program_sequence( 'example' ));
   </script>
 </body>
 </html>
