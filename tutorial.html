@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tutorial for Accessible PencilCode Foundation</title>
+  <!-- Twitter Bootstrap CSS [3.3.7] (Bootstrap CDN) +SRI -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="client.css">
+</head>
+<body lang="en">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6">
+        <h1>Accessible PencilCode <small>Foundation</small></h1>
+      </div><!-- .col-xs-6 -->
+      <div class="col-xs-6">
+        <p class="lead">Tutorial</p>
+      </div><!-- .col-xs-6 -->
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <p>Welcome to the Accessible Pencil Code simulation. This tutorial will walk you through this simulation's auditory cues, as well as the procedure for tasks you will be asked to complete.</p>
+        <p>This simulation will use three different forms of auditory cues. You will hear them being used in different orders, but all together at a time. The first is speech. This simulation will use regular speech to indicate Pencil Code functions.</p>
+        <p>The second form of auditory cue is earcons. These are synthesized musical sounds. We will teach you how to use this simulation's earcons shortly.</p>
+        <p>The third and final form is spearcons. These are sped-up speech. They should be as self-explanatory as speech. Let us know later if you have issues understanding any of the three audible cues.</p>
+        <p>We will now conduct earcon training. There will be buttons for you to click. Listen to what the earcons stand for, then press the buttons to hear the actual earcons.</p>
+        <button class="btn btn-default" onclick="javascript:play('identifycategory')">Browsing through categories</button>
+        <button class="btn btn-default" onclick="javascript:play('selectcategory')">Selecting a category</button>
+        <button class="btn btn-default" onclick="javascript:play('identifyblock')">Browsing through code blocks</button>
+        <button class="btn btn-default" onclick="javascript:play('selectblock')">Selecting a code block</button>
+      </div>
+    </div><!-- .row -->
+  </div><!-- .container -->
+  <!-- jQuery [3.2.1] (Google Hosted Libraries) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Twitter Bootstrap [3.3.7] (Bootstrap CDN) +SRI -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- howler.js [2.0.4] (CDNJS) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.min.js"></script>
+  <script src="client-tutorial.js"></script>
+  <script>
+    // show "Move" blocks on page load (jQuery.ready();)
+    $(update_block_list( 'category-1' ));
+    $(update_program_sequence( 'example' ));
+  </script>
+</body>
+</html>

@@ -316,9 +316,9 @@ function codify_program( program, nesting ) {
   for ( var i = 0; i < program.length; i++ ) {
     block_html_insert += program[i].codify();
     if ( program[i]['statements'] !== null ) { // nesting
-      block_html_insert += '<ul class="nav nav-pills nav-stacked nesting nesting-' + (nesting + 1) + '" id="nesting-' + (nesting + 1) + '">';
+      block_html_insert += '<div class="nav nav-pills nav-stacked nesting nesting-' + (nesting + 1) + '" id="nesting-' + (nesting + 1) + '">';
       block_html_insert += codify_program( program[i]['statements'], nesting + 1 );
-      block_html_insert += '</ul>';
+      block_html_insert += '</div>';
     }
   }
   return block_html_insert;
@@ -340,7 +340,7 @@ function update_block_list( category_id_full ) {
   blocks = blocklist[catnumtoname[category_id - 1]];
   for ( var i = 0; i < blocks.length; i++ ) {
     var params = codify_params( blocks[i].params );
-    block_html_insert += '<li role="presentation" class="block" id="block-' + blocks[i].name + '" alt="' + blocks[i].desc + '"><a href="#" aria-label="' + blocks[i].desc + '">' + blocks[i].name + ' ' + params + '</a></li>';
+    block_html_insert += '<li role="presentation" class="block" id="block-' + i + '" alt="' + blocks[i].desc + '"><a href="#" aria-label="' + blocks[i].desc + '">' + blocks[i].name + ' ' + params + '</a></li>';
   }
   $("#block-list").html(block_html_insert);
 }
@@ -414,20 +414,34 @@ $("#program-sequence").on('focusout', '.block', function( event ) {
 
 // TODO: get it to work
 
-$(".nesting").on('focus', '.block', function( event ) {
-  // do something on focus
-  alert("nesting opening!");
+var nestingopening = function( event ) {
   play('nestingopening', null);
-});
-
-// TODO: get this to work
-
-$(".nesting").on('focusout', '.block', function( event ) {
-  // do something on focusout
+}
+var nestingclosing = function( event ) {
   play('nestingclosing', null);
-});
+}
+$("#program-sequence").on('focus', '.nesting', nestingopening);
+// $("#program-sequence").off('focus', '.nesting', nestingclosing);
+// TODO: get this to work
+$("#program-sequence").on('focusout', '.nesting', nestingclosing);
+// $("#program-sequence").off('focusout', '.nesting', nestingopening);
 
 $("#block-list").on('click', '.block', function( event ) {
   // do something on click
   play('selectblock', null);
 });
+
+$("#program-sequence").on('keydown', '.block', function( event ) {
+  if ( event.key === "ArrowDown" ) {
+    $(':focus');
+  }
+});
+
+// Prevent scrolling when pressing arrow keys
+document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    var keyCode = evt.keyCode;
+    if (keyCode >= 37 && keyCode <= 40) {
+        return false;
+    }
+};
