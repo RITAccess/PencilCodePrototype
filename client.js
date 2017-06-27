@@ -243,6 +243,9 @@ var sounds = {
     }),
     'category-link-8': new Howl({
       src: ['assets/spearcon_category_snippets.mp3']
+    }),
+    'selected': new Howl({
+      src: ['assets/spearcon_selected.mp3']
     })
   }
 };
@@ -360,7 +363,11 @@ function play( sound, name ) {
       sounds['speech'][name].play();
     // }
   } else if ( method == 'spearcon' ) {
-    sounds['spearcon'][name].play();
+    if ( sound == 'selectcategory' ) {
+      sounds['spearcon']['selected'].play();
+    } else {
+      sounds['spearcon'][name].play();
+    }
   }
 }
 
@@ -395,7 +402,6 @@ $("#category-list").on('click', '.category', function( event ) {
 });
 $("#category-list").on('keydown', '.category', function( event ) {
   if ( event.keyCode === 13 ) { // keycode 13 = enter key
-    console.log("13!");
     selectcategory( event, $(this) );
   }
 });
