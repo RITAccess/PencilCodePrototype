@@ -376,17 +376,27 @@ $("#category-list").on('focus', '.category', function( event ) {
  * Derived from the Elephant codebase, also originally written by Jeffrey Wang
 */
 
-$("#category-list").on('click', '.category', function( event ) {
-  play('selectcategory', $(this).attr('id').substring(0,8) + "-link-" + $(this).attr('id').substring(9));
-  if ( !$(this).hasClass("active") ) {
+function selectcategory ( event, thisObj ) {
+  play('selectcategory', thisObj.attr('id').substring(0,8) + "-link-" + thisObj.attr('id').substring(9));
+  if ( !thisObj.hasClass("active") ) {
     $(".category").each(function(index, el) {
       if ( $(el).hasClass("category-active") ) {
         $(el).removeClass("category-active").removeClass("active");
       }
     });
-    $(this).addClass("category-active").addClass("active");
-    update_block_list($(this).attr('id'));
+    thisObj.addClass("category-active").addClass("active");
+    update_block_list(thisObj.attr('id'));
      // pull content for selected category into the pane
+  }
+};
+
+$("#category-list").on('click', '.category', function( event ) {
+  selectcategory( event, $(this) );
+});
+$("#category-list").on('keydown', '.category', function( event ) {
+  if ( event.keyCode === 13 ) { // keycode 13 = enter key
+    console.log("13!");
+    selectcategory( event, $(this) );
   }
 });
 

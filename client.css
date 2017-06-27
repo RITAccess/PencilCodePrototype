@@ -2,3 +2,18 @@
   border-style: solid;
   border-width: 1px;
 }
+
+.category {
+  border-style: solid;
+  border-width: 2px;
+  margin-bottom: 0px;
+}
+
+.category-link {
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  color: #337ab7;
+  text-decoration: none;
+}
