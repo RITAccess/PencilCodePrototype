@@ -25,3 +25,17 @@
 .category-link:focus, .category-link:hover {
   color: #23527c;
 }
+
+.block-link {
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  color: #337ab7;
+  text-decoration: none;
+  margin-bottom: 0px;
+}
+
+.block-link:focus, .block-link:hover {
+  color: #23527c;
+}
