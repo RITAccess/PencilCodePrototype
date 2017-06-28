@@ -560,7 +560,20 @@ var programs = {
       new Block( 'control', 'for', ['1', '25'], [
         new Block( 'move', 'fd', [100] ),
         new Block( 'move', 'rt', [88] )
-      ] )
+      ])
+    ]
+  },
+  '1-1-A': {
+    program: [
+      new Block( 'art', 'pen', ['green', 10] ),
+      new Block( 'operators', 'assign', ['x', 30] ),
+      new Block( 'control', 'while', ['x', '90'], [
+        new Block( 'operators', 'increment', ['x', 1] )
+      ]),
+      new Block( 'control', 'ifelse', [new Block('operators', 'multiply', ['x', 3]), 271], [
+        new Block( 'move', 'turnto', [270] )
+      ] ),
+      new Block( 'move', 'fd', [100] )
     ]
   }
 };
@@ -600,12 +613,20 @@ Block.prototype.codify = function( tabindex ) {
   return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + tabindex + '" aria-label="' + this.name + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
 }
 
+Block.prototype.codifyBasics = function() {
+  return '(' + this.name + ': ' + codify_params( this.params ) + ')';
+}
+
 // ------- Functions ------ \\
 
 function codify_params( params ) {
   var paramcode = '';
   for ( var j = 0; j < params.length; j++ ) {
-    paramcode += ' <code>' + params[j] + '</code>';
+    if ( typeof params[j] === 'object' ) {
+      paramcode += params[j].codifyBasics();
+    } else {
+      paramcode += ' <code>' + params[j] + '</code>';
+    }
   }
   return paramcode;
 }
@@ -613,7 +634,11 @@ function codify_params( params ) {
 function sonify_params( params ) {
   var sonified = '';
   for ( var j = 0; j < params.length; j++ ) {
-    sonified += params[j] + ", ";
+    if ( typeof params[j] === 'object' ) {
+      sonified += params[j].name + " " + sonify_params( params[j].params );
+    } else {
+      sonified += params[j] + ", ";
+    }
   }
   return sonified;
 }
@@ -840,3 +865,7 @@ document.onkeydown = function(evt) {
         return false;
     }
 };
+
+$("body").on('change', '#programlist', function( event ) {
+  update_program_sequence( $('#programlist option:selected').attr('id') );
+});
