@@ -570,10 +570,28 @@ var programs = {
       new Block( 'control', 'while', ['x', '90'], [
         new Block( 'operators', 'increment', ['x', 1] )
       ]),
-      new Block( 'control', 'ifelse', [new Block('operators', 'multiply', ['x', 3]), 271], [
+      new Block( 'control', 'ifelse', [new Block('operators', 'lessthan', [new Block('operators', 'multiply', ['x', 3]), 271])], [
         new Block( 'move', 'turnto', [270] )
       ] ),
       new Block( 'move', 'fd', [100] )
+    ]
+  },
+  '1-1-B': {
+    program: [
+      new Block( 'art', 'pen', ['purple', 10] ),
+      new Block( 'operators', 'assign', ['x', 3] ),
+      new Block( 'control', 'ifelse', [new Block('operators', 'is', ['x', 4])], [
+        new Block( 'control', 'for', ['1', '4'], [
+          new Block( 'move', 'fd', [200] ),
+          new Block( 'move', 'lt', [90] )
+        ])
+      ]),
+      new Block('control', 'for', ['1', '3'], [
+        new Block('move', 'fd', [100]),
+        new Block('move', 'rt', [90])
+      ]),
+      new Block('move', 'lt', [90]),
+      new Block('move', 'rtarc', [180, 50])
     ]
   }
 };
@@ -648,10 +666,10 @@ function codify_program( program, nesting, tabindex ) {
   for ( var i = 0; i < program.length; i++ ) {
     block_html_insert += program[i].codify( tabindex++ );
     if ( program[i]['statements'] !== null ) { // nesting
-      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" id="nesting-' + (nesting + 1) + '" tabindex="' + tabindex++ + '"></div>';
+      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + tabindex++ + '"></div>';
       block_html_insert += codify_program( program[i]['statements'], nesting + 1, tabindex );
       tabindex += program[i]['statements'].length;
-      block_html_insert += '<div class="nestingend nestingend-' + (nesting + 1) + '" id="nesting-' + (nesting + 1) + '" tabindex="' + tabindex++ + '"></div>';
+      block_html_insert += '<div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + tabindex++ + '"></div>';
     }
   }
   return block_html_insert;
@@ -698,6 +716,13 @@ function play( sound, name, override ) {
     var index = name.indexOf( 'link' );
     if ( index !== -1 ) {
       name = name.substring(0, index) + name.substring(index + 5);
+    } else {
+      var index2 = name.indexOf( 'block-[' );
+      var index3 = name.indexOf( ']' );
+      var blockid = name.substring(index2 + 7, index3);
+      console.log( blockid );
+      name = "block-" + blockid;
+      override = null;
     }
   }
 
@@ -846,13 +871,14 @@ $("#category-list").on('keydown', '.category', function( event ) {
 
 $("#block-list").on('keydown', '.block', function( event ) {
   if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
-    play('identifyblock', $(this).attr('id'), 'speech');
+    console.log($(this).attr('class'));
+    play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
   }
 });
 
 $("#program-sequence").on('keydown', '.block', function( event ) {
   if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
-    play('identifyblock', $(this).attr('id'), 'speech');
+    play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
   }
 });
 
