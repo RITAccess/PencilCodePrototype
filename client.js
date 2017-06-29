@@ -627,8 +627,8 @@ function Block( category, name, params, statements, desc ) {
   }
 }
 
-Block.prototype.codify = function( tabindex ) {
-  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + tabindex + '" aria-label="' + this.name + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
+Block.prototype.codify = function() {
+  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + ti + '" aria-label="' + this.name + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
 }
 
 Block.prototype.codifyBasics = function() {
@@ -661,15 +661,14 @@ function sonify_params( params ) {
   return sonified;
 }
 
-function codify_program( program, nesting, tabindex ) {
+function codify_program( program, nesting ) {
   var block_html_insert = '';
   for ( var i = 0; i < program.length; i++ ) {
-    block_html_insert += program[i].codify( tabindex++ );
+    block_html_insert += program[i].codify();
     if ( program[i]['statements'] !== null ) { // nesting
-      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + tabindex++ + '"></div>';
-      block_html_insert += codify_program( program[i]['statements'], nesting + 1, tabindex );
-      tabindex += program[i]['statements'].length;
-      block_html_insert += '<div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + tabindex++ + '"></div>';
+      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
+      block_html_insert += codify_program( program[i]['statements'], nesting + 1 );
+      block_html_insert += '<div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
     }
   }
   return block_html_insert;
@@ -684,6 +683,7 @@ function get_auditory_method() {
 }
 
 function update_block_list( category_id_full ) {
+  ti = 10;
   var category_id = category_id_full.substring(9);
   var block_html_insert = "";
   var blocks = [];
@@ -775,16 +775,16 @@ function selectcategory ( event, thisObj, focusOnBlock ) {
 $("#category-list").on('click', '.category', function( event ) {
   selectcategory(event, $(this), function() {
     setTimeout(function() {
-      $("#block-0").focus();
-    }, 0);
+      document.getElementById("block-0").focus();
+    }, 100);
   });
 });
 $("#category-list").on('keydown', '.category', function( event ) {
   if ( event.keyCode === 13 ) { // keycode 13 = enter key
     selectcategory(event, $(this), function() {
       setTimeout(function() {
-        $("#block-0").focus();
-      }, 0);
+        document.getElementById("block-0").focus();
+      }, 100);
     });
   }
 });
@@ -884,13 +884,13 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 
 
 // Prevent scrolling when pressing arrow keys
-document.onkeydown = function(evt) {
-    evt = evt || window.event;
-    var keyCode = evt.keyCode;
-    if (keyCode >= 37 && keyCode <= 40) {
-        return false;
-    }
-};
+// document.onkeydown = function(evt) {
+//     evt = evt || window.event;
+//     var keyCode = evt.keyCode;
+//     if (keyCode >= 37 && keyCode <= 40) {
+//         return false;
+//     }
+// };
 
 $("body").on('change', '#programlist', function( event ) {
   update_program_sequence( $('#programlist option:selected').attr('id') );
