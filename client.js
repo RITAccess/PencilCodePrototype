@@ -716,7 +716,7 @@ function play( sound, name, override ) {
     var index = name.indexOf( 'link' );
     if ( index !== -1 ) {
       name = name.substring(0, index) + name.substring(index + 5);
-    } else {
+    } else if ( name.indexOf('block-[') !== -1 ) {
       var index2 = name.indexOf( 'block-[' );
       var index3 = name.indexOf( ']' );
       var blockid = name.substring(index2 + 7, index3);
