@@ -375,6 +375,12 @@ var sounds = {
     'selected': new Howl({
       src: ['assets/spearcon_selected.mp3']
     }),
+    'startofprogram': new Howl({
+      src: ['assets/startofprogram.mp3']
+    }),
+    'endofprogram': new Howl({
+      src: ['assets/endofprogram.mp3']
+    }),
     'block-bk': new Howl({
       src: ['assets/Blocks/move/bk.mp3']
     }),
@@ -663,6 +669,9 @@ function sonify_params( params ) {
 
 function codify_program( program, nesting ) {
   var block_html_insert = '';
+  if ( nesting == 0 ) {
+    block_html_insert += '<div id="startofprogram" tabindex="' + ti++ + '" aria-label="Start of program"></div>';
+  }
   for ( var i = 0; i < program.length; i++ ) {
     block_html_insert += program[i].codify();
     if ( program[i]['statements'] !== null ) { // nesting
@@ -670,6 +679,9 @@ function codify_program( program, nesting ) {
       block_html_insert += codify_program( program[i]['statements'], nesting + 1 );
       block_html_insert += '<div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
     }
+  }
+  if ( nesting == 0 ) {
+    block_html_insert += '<div id="endofprogram" tabindex="' + ti++ + '" aria-label="End of program"></div>';
   }
   return block_html_insert;
 }
@@ -683,8 +695,8 @@ function get_auditory_method() {
 }
 
 function update_block_list( category_id_full ) {
+  var category_id = Number(category_id_full.substring(9));
   ti = 10;
-  var category_id = category_id_full.substring(9);
   var block_html_insert = "";
   var blocks = [];
   var catnumtoname = ['move', 'art', 'text', 'sound', 'control', 'operators', 'sprites', 'snippets'];
@@ -712,7 +724,7 @@ function play( sound, name, override ) {
     method = override;
   }
 
-  if ( ( method == 'speech' || method == 'spearcon' ) && name !== null ) {
+  if ( ( method == 'speech' || method == 'spearcon' ) && ( name !== null && name !== undefined ) ) {
     var index = name.indexOf( 'link' );
     if ( index !== -1 ) {
       name = name.substring(0, index) + name.substring(index + 5);
@@ -770,6 +782,22 @@ function selectcategory ( event, thisObj, focusOnBlock ) {
      // pull content for selected category into the pane
   }
   focusOnBlock();
+  // $('.block').each(function( index ) {
+  //   if ( $(this).attr('id') === 'block-0' ) {
+  //     $(this).focus();
+  //     console.log("Focused");
+  //     return false;
+  //   }
+  // });
+  // jQuery focus() function unable to focus on non-form elems, falling back to pure JS
+  // forcing object to become array through MDN documentation
+  // on document.getElementsByClassName: https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName
+  var blocklist = document.getElementsByClassName("block");
+  var blocktraversal = Array.prototype.filter.call(blocklist, function( element ) {
+    if ( element.id == 'block-0' ) {
+      element.focus();
+    }
+  });
 }
 
 $("#category-list").on('click', '.category', function( event ) {
@@ -894,4 +922,12 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 
 $("body").on('change', '#programlist', function( event ) {
   update_program_sequence( $('#programlist option:selected').attr('id') );
+});
+
+$("#program-sequence").on('focus', '#startofprogram', function( event ) {
+  play('startofprogram', 'startofprogram');
+});
+
+$("#program-sequence").on('focus', '#endofprogram', function( event ) {
+  play('startofprogram', 'endofprogram');
 });
