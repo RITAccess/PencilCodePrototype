@@ -6,9 +6,6 @@
 .category {
   border-style: solid;
   border-width: 2px;
-}
-
-.category-link {
   padding-top: 10px;
   padding-right: 15px;
   padding-bottom: 10px;
@@ -22,7 +19,7 @@
   background-color: #eee;
 }
 
-.category-link:focus, .category-link:hover {
+.category:focus, .category:hover {
   color: #23527c;
 }
 
