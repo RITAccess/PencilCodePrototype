@@ -150,7 +150,8 @@ var blocklist = {
      name: 'for',
      desc: 'For in loop. Repeat something while counting up x',
      id: 'forin',
-     params: ['x', '[0...10]', '{}']
+     params: ['x', '[0...10]', '{}'],
+     aural: 'for in'
     }, {
      name: 'while',
      desc: 'While loop. Repeat while a condition is true',
@@ -599,6 +600,21 @@ var programs = {
       new Block('move', 'lt', [90]),
       new Block('move', 'rtarc', [180, 50])
     ]
+  },
+  '1-1-C': {
+    program: [
+      new Block( 'move', 'speed', [10] ),
+      new Block( 'art', 'pen', ['purple', 10] ),
+      new Block( 'move', 'jumpto', [-250, 500] ),
+      new Block( 'control', 'forin', ['x', '[0..10]'], [
+        new Block( 'move', 'turnto', [90] ),
+        new Block( 'control', 'forin', ['y', '[0..10]'], [
+          new Block( 'move', 'fd', [10] )
+        ]),
+        new Block( 'move', 'rt', [90] ),
+        new Block( 'move', 'jumpxy', [-100, new Block( 'operators', 'multiply', ['y', -5] )] )
+      ])
+    ]
   }
 };
 
@@ -606,14 +622,16 @@ var ti = 10;
 
 // ------- Classes and prototypes ------- \\
 
-function Block( category, name, params, statements, desc ) {
+function Block( category, id, params, statements, desc ) {
   this.category = category;
-  this.name = name;
+  this.id = id;
   this.desc = "Generic block";
   this.params = [];
   this.statements = null;
+  this.name = id;
+  // this.aural = null;
   function getBlock( element, index, array ) {
-    if ( name == element['name'] ) {
+    if ( id == element['id'] ) {
       return element;
     }
   }
@@ -621,6 +639,8 @@ function Block( category, name, params, statements, desc ) {
     var blocktemp = blocklist[category].find(getBlock);
     this.desc = blocktemp['desc'];
     this.params = blocktemp['params'];
+    this.aural = blocktemp['aural'];
+    this.name = blocktemp['name'];
   }
   if ( params !== undefined ) {
     this.params = params;
@@ -634,7 +654,12 @@ function Block( category, name, params, statements, desc ) {
 }
 
 Block.prototype.codify = function() {
-  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + ti + '" aria-label="' + this.name + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
+  var sonifyname = this.name;
+  if ( this.aural !== undefined && this.aural !== null ) { // for screen reader auralization overrides
+    console.log("Override");
+    sonifyname = this.aural;
+  }
+  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + ti + '" aria-label="' + sonifyname + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
 }
 
 Block.prototype.codifyBasics = function() {
