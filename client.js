@@ -615,6 +615,21 @@ var programs = {
         new Block( 'move', 'jumpxy', [-100, new Block( 'operators', 'multiply', ['y', -5] )] )
       ])
     ]
+  },
+  '1-3-A': {
+    program: [
+      new Block( 'art', 'pen', ['green', 10] ),
+      new Block( 'control', 'forin', ['[1..4]'], [
+        new Block( 'move', 'rtarc', [90, 50] )
+      ]),
+      new Block( 'move', 'fd', [50] ),
+      new Block( 'control', 'forin', ['[1..3]'], [
+        new Block( 'move', 'rt', [90] ),
+        new Block( 'move', 'fd', [100] )
+      ]),
+      new Block( 'move', 'rt', [90] ),
+      new Block( 'move', 'fd', [50] )
+    ]
   }
 };
 
