@@ -36,3 +36,8 @@
 .block-link:focus, .block-link:hover {
   color: #23527c;
 }
+
+.active {
+  border-style: solid;
+  border-width: 3px;
+}

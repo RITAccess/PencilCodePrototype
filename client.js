@@ -555,6 +555,15 @@ var sounds = {
     }),
     'block-match': new Howl({
       src: ['assets/Blocks/operators/match.mp3']
+    }),
+    'nesting-1': new Howl({
+      src: ['assets/nesting-1.mp3']
+    }),
+    'nesting-2': new Howl({
+      src: ['assets/nesting-2.mp3']
+    }),
+    'nesting-3': new Howl({
+      src: ['assets/nesting-3.mp3']
     })
   }
 };
@@ -774,6 +783,10 @@ function play( sound, name, override ) {
       var blockid = name.substring(index2 + 7, index3);
       console.log( blockid );
       name = "block-" + blockid;
+      override = null;
+    } else if ( name.indexOf('nesting-') !== -1 ) {
+      var nestingdepth = name.substring(name.indexOf('nesting-') + 8);
+      name = "nesting-" + nestingdepth;
       override = null;
     }
   }
