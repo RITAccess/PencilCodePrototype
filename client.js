@@ -848,10 +848,29 @@ function selectcategory ( event, thisObj, focusOnBlock ) {
   var blocklist = document.getElementsByClassName("block");
   var blocktraversal = Array.prototype.filter.call(blocklist, function( element ) {
     if ( element.id == 'block-0' ) {
-      element.focus();
+      window.setTimeout(function(){
+        element.firstChild.focus();
+      }, 0);
+      console.log(element);
+      console.log(element.firstChild);
+    } else {
+      console.log("Nope");
     }
   });
 }
+
+// Event binding in pure JavaScript on dynamically created elements
+// https://stackoverflow.com/questions/203198/event-binding-on-dynamically-created-elements
+
+function hasClass(elem, className) {
+    return elem.className.split(' ').indexOf(className) > -1;
+}
+
+document.addEventListener('click', function (e) {
+    if (hasClass(e.target, 'block')) {
+        e.focus();
+    }
+}, false);
 
 $("#category-list").on('click', '.category', function( event ) {
   selectcategory(event, $(this), function() {
