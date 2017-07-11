@@ -4,6 +4,8 @@
 
 // ------- Data ------- \\
 
+var ss = window.speechSynthesis;
+
 var blocklist = {
   move: [
     {
@@ -802,6 +804,9 @@ function play( sound, name, override ) {
     // if ( sound.indexOf('select') == -1 ) { // don't play when selecting
       sounds['speech'][name].play();
     // }
+  } else if ( method == 'speechsynthesis' ) {
+    var utterance = new SpeechSynthesisUtterance('This is a test! Hopefully it works.');
+    ss.speak(utterance);
   } else if ( method == 'spearcon' ) {
     if ( override == 'spearcon' ) {
       sounds['spearcon'][sound].play();
