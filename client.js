@@ -309,7 +309,7 @@ var sounds = {
       src: ['assets/IdentifyCategory.m4a']
     }),
     selectcategory: new Howl({
-      src: ['assets/SelectCategory_short.m4a']
+      src: ['assets/SelectCategory_twonotehigh.m4a']
     }),
     nestingopening: new Howl({
       src: ['assets/Nesting-Opening.mp3']
@@ -569,6 +569,9 @@ var sounds = {
     }),
     'nesting-3': new Howl({
       src: ['assets/nesting-3.mp3']
+    }),
+    'goback': new Howl({
+      src: ['assets/go_back.mp3']
     })
   }
 };
@@ -754,6 +757,7 @@ function update_block_list( category_id_full ) {
   var blocks = [];
   var catnumtoname = ['move', 'art', 'text', 'sound', 'control', 'operators', 'sprites', 'snippets'];
   blocks = blocklist[catnumtoname[category_id - 1]];
+  block_html_insert += '<li role="presentation" class="back" id="back-' + category_id + '"><p class="block-link" aria-label="Go back" tabindex="' + ti++ + '">Go back</p></li>';
   for ( var i = 0; i < blocks.length; i++ ) {
     var params = codify_params( blocks[i].params );
     var blockid = blocks[i].name;
@@ -960,6 +964,33 @@ $("#block-list").on('click', '.block', function(event) {
 $("#block-list").on('keydown', '.block', function( event ) {
   if ( event.keyCode === 13 ) { // keycode 13 = enter key
     selectblock(event, $(this));
+  }
+});
+
+function gobacktocategories( event, thisObj ) {
+  // do something on click
+  var catidraw = thisObj.attr('id');
+  var catid = Number(catidraw.substring( 5 ));
+  var catlist = document.getElementsByClassName('category');
+  [].forEach.call(catlist, function( element ) {
+    if ( element.id === 'category-' + catid ) {
+      catelem = element;
+    }
+    return false;
+  });
+  window.setTimeout(function(){
+    catelem.focus();
+  }, 0);
+  play('goback', 'back-' + catid);
+}
+
+$("#block-list").on('click', '.back', function(event) {
+  gobacktocategories(event, $(this));
+});
+
+$("#block-list").on('keydown', '.back', function( event ) {
+  if ( event.keyCode === 13 ) { // keycode 13 = enter key
+    gobacktocategories(event, $(this));
   }
 });
 
