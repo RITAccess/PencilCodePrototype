@@ -556,6 +556,9 @@ var sounds = {
     'block-match': new Howl({
       src: ['assets/Blocks/operators/match.mp3']
     }),
+    'nesting-0': new Howl({
+      src: ['assets/nesting-0.mp3']
+    }),
     'nesting-1': new Howl({
       src: ['assets/nesting-1.mp3']
     }),
@@ -680,7 +683,6 @@ function Block( category, id, params, statements, desc ) {
 Block.prototype.codify = function() {
   var sonifyname = this.name;
   if ( this.aural !== undefined && this.aural !== null ) { // for screen reader auralization overrides
-    console.log("Override");
     sonifyname = this.aural;
   }
   return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + ti + '" aria-label="' + sonifyname + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
@@ -724,9 +726,9 @@ function codify_program( program, nesting ) {
   for ( var i = 0; i < program.length; i++ ) {
     block_html_insert += program[i].codify();
     if ( program[i]['statements'] !== null ) { // nesting
-      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
+      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div><div class="nav nav-pills nav-stacked nestinglevel-' + (nesting + 1) + '">';
       block_html_insert += codify_program( program[i]['statements'], nesting + 1 );
-      block_html_insert += '<div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
+      block_html_insert += '</div><div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
     }
   }
   if ( nesting == 0 ) {
@@ -787,6 +789,9 @@ function play( sound, name, override ) {
     } else if ( name.indexOf('nesting-') !== -1 ) {
       var nestingdepth = name.substring(name.indexOf('nesting-') + 8);
       name = "nesting-" + nestingdepth;
+      override = null;
+    } else if ( name.indexOf('nestinglevel-') !== -1 ) {
+      name = 'nesting-' + name.substring(name.indexOf('nestinglevel-') + 13);
       override = null;
     }
   }
@@ -979,6 +984,9 @@ $("#block-list").on('keydown', '.block', function( event ) {
 $("#program-sequence").on('keydown', '.block', function( event ) {
   if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
     play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
+  } else if ( event.key === "." && get_auditory_method() === 'earcon' ) {
+    console.log( $(this).parent().attr('class') );
+    play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
   }
 });
 
