@@ -165,9 +165,9 @@ var blocklist = {
      id: 'if',
      params: ['a is b', '{}']
     }, {
-     name: 'if else',
+     name: 'else',
      desc: 'If else statement. Do something if a condition is true, otherwise something else',
-     id: 'ifelse',
+     id: 'else',
      params: ['{}']
     }, {
      name: 'forever',
@@ -196,67 +196,93 @@ var blocklist = {
       name: '=',
       desc: 'Set a variable',
       params: ['x', 0],
-      id: 'assign'
+      id: 'assign',
+      displayas: 'binaryoperator',
+      aural: 'equals'
     }, {
       name: '+=',
       desc: 'Increase a variable',
       params: ['x', 1],
-      id: 'increment'
+      id: 'increment',
+      displayas: 'binaryoperator',
+      aural: 'plus equals'
     }, {
       name: 'f',
       desc: 'Define a new function',
       params: ['= (x)', '->', '{}'],
-      id: 'funcdef'
+      id: 'funcdef',
+      displayas: 'funcdef',
+      aural: 'function f defined as'
     }, {
       name: 'f',
       desc: 'Use a custom function',
       params: ['(x)'],
-      id: 'funccall'
+      id: 'funccall',
+      displayas: 'funccall',
+      aural: 'f of x'
     }, {
       name: 'is',
       desc: 'Compare two values',
       params: ['A', 'B'],
-      id: 'is'
+      id: 'is',
+      displayas: 'binaryoperator',
+      aural: 'is'
     }, {
       name: '<',
       desc: 'Compare two values',
       params: ['A', 'B'],
-      id: 'lessthan'
+      id: 'lessthan',
+      displayas: 'binaryoperator',
+      aural: 'less than'
     }, {
       name: '>',
       desc: 'Compare two values',
       params: ['A', 'B'],
-      id: 'greaterthan'
+      id: 'greaterthan',
+      displayas: 'binaryoperator',
+      aural: 'greater than'
     }, {
       name: '+',
       desc: 'Add two numbers',
       params: ['A', 'B'],
-      id: 'add'
+      id: 'add',
+      displayas: 'binaryoperator',
+      aural: 'plus'
     }, {
       name: '-',
       desc: 'Subtract two numbers',
       params: ['A', 'B'],
-      id: 'subtract'
+      id: 'subtract',
+      displayas: 'binaryoperator',
+      aural: 'minus'
     }, {
       name: '*',
       desc: 'Multiply two numbers',
       params: ['A', 'B'],
-      id: 'multiply'
+      id: 'multiply',
+      displayas: 'binaryoperator',
+      aural: 'times'
     }, {
       name: '/',
       desc: 'Divide two numbers',
       params: ['A', 'B'],
-      id: 'divide'
+      id: 'divide',
+      displayas: 'binaryoperator',
+      aural: 'divided by'
     }, {
       name: 'and',
       desc: 'True if both are true',
       params: ['A', 'B'],
-      id: 'and'
+      id: 'and',
+      displayas: 'binaryoperator',
+      aural: 'and'
     }, {
       name: 'or',
       desc: 'True if either is true',
       params: ['A', 'B'],
-      id: 'or'
+      id: 'or',
+      displayas: 'binaryoperator',
+      aural: 'or'
     }, {
       name: 'not',
       desc: 'True if input is false',
@@ -447,7 +473,7 @@ var sounds = {
     'block-forever': new Howl({
       src: ['assets/Blocks/control/forever.mp3']
     }),
-    'block-ifelse': new Howl({
+    'block-else': new Howl({
       src: ['assets/Blocks/control/ifelse.mp3']
     }),
     'block-keydown': new Howl({
@@ -591,12 +617,15 @@ var programs = {
     program: [
       new Block( 'art', 'pen', ['green', 10] ),
       new Block( 'operators', 'assign', ['x', 30] ),
-      new Block( 'control', 'while', ['x', '90'], [
+      new Block( 'control', 'while', [new Block('operators', 'is', ['x', 90])], [
         new Block( 'operators', 'increment', ['x', 1] )
       ]),
-      new Block( 'control', 'ifelse', [new Block('operators', 'lessthan', [new Block('operators', 'multiply', ['x', 3]), 271])], [
+      new Block( 'control', 'if', [new Block('operators', 'lessthan', [new Block('operators', 'multiply', ['x', 3]), 271])], [
         new Block( 'move', 'turnto', [270] )
-      ] ),
+      ]),
+      new Block( 'control', 'else', [], [
+        new Block( 'move', 'turnto', [45] )
+      ]),
       new Block( 'move', 'fd', [100] )
     ]
   },
@@ -604,18 +633,20 @@ var programs = {
     program: [
       new Block( 'art', 'pen', ['purple', 10] ),
       new Block( 'operators', 'assign', ['x', 3] ),
-      new Block( 'control', 'ifelse', [new Block('operators', 'is', ['x', 4])], [
+      new Block( 'control', 'if', [new Block('operators', 'is', ['x', 4])], [
         new Block( 'control', 'for', ['1', '4'], [
           new Block( 'move', 'fd', [200] ),
           new Block( 'move', 'lt', [90] )
         ])
       ]),
-      new Block('control', 'for', ['1', '3'], [
-        new Block('move', 'fd', [100]),
-        new Block('move', 'rt', [90])
-      ]),
-      new Block('move', 'lt', [90]),
-      new Block('move', 'rtarc', [180, 50])
+      new Block( 'control', 'else', [], [
+        new Block('control', 'for', ['1', '3'], [
+          new Block('move', 'fd', [100]),
+          new Block('move', 'rt', [90])
+        ]),
+        new Block('move', 'lt', [90]),
+        new Block('move', 'rtarc', [180, 50])
+      ])
     ]
   },
   '1-1-C': {
@@ -665,6 +696,8 @@ function Block( category, id, params, statements, desc ) {
   function getBlock( element, index, array ) {
     if ( id == element['id'] ) {
       return element;
+    } else if ( id == element['name'] ) {
+      return element;
     }
   }
   if ( blocklist[category].find(getBlock) !== undefined ) {
@@ -673,6 +706,7 @@ function Block( category, id, params, statements, desc ) {
     this.params = blocktemp['params'];
     this.aural = blocktemp['aural'];
     this.name = blocktemp['name'];
+    this.displayas = blocktemp['displayas'];
   }
   if ( params !== undefined ) {
     this.params = params;
@@ -690,14 +724,42 @@ Block.prototype.codify = function() {
   if ( this.aural !== undefined && this.aural !== null ) { // for screen reader auralization overrides
     sonifyname = this.aural;
   }
-  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"><a href="#" tabindex="' + ti + '" aria-label="' + sonifyname + ". " + sonify_params( this.params ) + ". " + this.desc + ' ">' + this.name + ': ' + codify_params( this.params ) + '</a></li>';
+  var sonified_statement;
+  var aria_hidden;
+  if ( get_auditory_method() === 'spearcon' ) {
+    sonified_statement = '';
+    aria_hidden = ' aria-hidden="true"';
+  } else {
+    sonified_statement = sonify_statement( sonifyname, this.params, this.displayas, this.aural ) + ". " + this.desc;
+    aria_hidden = '';
+  }
+  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
 }
 
 Block.prototype.codifyBasics = function() {
-  return '(' + this.name + ': ' + codify_params( this.params ) + ')';
+  // return '(' + this.name + ': ' + codify_params( this.params ) + ')';
+  return '(' + codify_statement( this.name, this.params, this.displayas ) + ')';
 }
 
 // ------- Functions ------ \\
+
+function codify_statement( name, params, displayas ) {
+  if ( displayas === 'binaryoperator' ) {
+    var param0disp, param1disp;
+    if ( typeof params[0] === 'object' ) {
+      param0disp = params[0].codifyBasics();
+    } else {
+      param0disp = params[0];
+    }
+    if ( typeof params[1] === 'object' ) {
+      param1disp = params[1].codifyBasics();
+    } else {
+      param1disp = params[1];
+    }
+    return param0disp + ' ' + name + ' ' + param1disp;
+  }
+  return name + ': ' + codify_params( params );
+}
 
 function codify_params( params ) {
   var paramcode = '';
@@ -705,17 +767,39 @@ function codify_params( params ) {
     if ( typeof params[j] === 'object' ) {
       paramcode += params[j].codifyBasics();
     } else {
-      paramcode += ' <code>' + params[j] + '</code>';
+      // paramcode += ' <code>' + params[j] + '</code>';
+      paramcode += ' ' + params[j];
     }
   }
   return paramcode;
 }
 
-function sonify_params( params ) {
+function sonify_statement( name, params, displayas, aural ) {
+  if ( displayas === 'binaryoperator' ) {
+    var param0sonify, param1sonify;
+    if ( typeof params[0] === 'object' ) {
+      // param0sonify = params[0].name + ' ' + sonify_params( params[0].params, params[0].displayas, params[0].aural );
+      param0sonify = sonify_statement( params[0].name, params[0].params, params[0].displayas, params[0].aural);
+    } else {
+      param0sonify = params[0];
+    }
+    if ( typeof params[1] === 'object' ) {
+      // param1sonify = params[1].name + ' ' + sonify_params( params[1].params, params[1].displayas, params[1].aural );
+      param1sonify = sonify_statement( params[1].name, params[1].params, params[1].displayas, params[1].aural );
+    } else {
+      param1sonify = params[1];
+    }
+    return '(' + param0sonify + ' ' + aural + ' ' + param1sonify + ')';
+  }
+  return name + ". " + sonify_params( params, displayas, aural );
+}
+
+function sonify_params( params, displayas, aural ) {
   var sonified = '';
   for ( var j = 0; j < params.length; j++ ) {
     if ( typeof params[j] === 'object' ) {
-      sonified += params[j].name + " " + sonify_params( params[j].params );
+      // sonified += params[j].name + " " + sonify_params( params[j].params, aural );
+      sonified += sonify_statement( params[j].name, params[j].params, params[j].displayas, params[j].aural );
     } else {
       sonified += params[j] + ", ";
     }
@@ -725,15 +809,21 @@ function sonify_params( params ) {
 
 function codify_program( program, nesting ) {
   var block_html_insert = '';
+  var aria_hidden;
+  if ( get_auditory_method() === 'spearcon' ) {
+    aria_hidden = ' aria-hidden="true"';
+  } else {
+    aria_hidden = '';
+  }
   if ( nesting == 0 ) {
-    block_html_insert += '<div id="startofprogram" tabindex="' + ti++ + '" aria-label="Start of program"></div>';
+    block_html_insert += '<div id="startofprogram" tabindex="' + ti++ + '" aria-label="Start of program"' + aria_hidden + '></div>';
   }
   for ( var i = 0; i < program.length; i++ ) {
     block_html_insert += program[i].codify();
     if ( program[i]['statements'] !== null ) { // nesting
-      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div><div class="nav nav-pills nav-stacked nestinglevel-' + (nesting + 1) + '">';
+      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"' + aria_hidden + '></div><div class="nav nav-pills nav-stacked nestinglevel-' + (nesting + 1) + '"' + aria_hidden + '>';
       block_html_insert += codify_program( program[i]['statements'], nesting + 1 );
-      block_html_insert += '</div><div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"></div>';
+      block_html_insert += '</div><div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"' + aria_hidden + '></div>';
     }
   }
   if ( nesting == 0 ) {
@@ -748,6 +838,7 @@ function codify_program( program, nesting ) {
 */
 function get_auditory_method() {
   return $("#auditorydisplayslist option:selected").attr('id');
+  update_program_sequence( $('#programlist option:selected').attr('id') );
 }
 
 function update_block_list( category_id_full ) {
