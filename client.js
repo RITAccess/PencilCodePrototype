@@ -165,6 +165,11 @@ var blocklist = {
      id: 'if',
      params: ['a is b', '{}']
     }, {
+     name: 'elseif',
+     desc: 'If else statement. Do something if a condition is true, otherwise something else',
+     id: 'elseif',
+     params: ['{}']
+    }, {
      name: 'else',
      desc: 'If else statement. Do something if a condition is true, otherwise something else',
      id: 'else',
@@ -664,6 +669,64 @@ var programs = {
       ])
     ]
   },
+  '1-2-A': {
+    program: [
+      new Block( 'art', 'pen', ['blue'] ),
+      new Block( 'operators', 'assign', ['x', 4] ),
+      new Block( 'control', 'if', [new Block( 'operators', 'lessthan', ['x', 6] )], [
+        new Block( 'control', 'forin', ['[1..x]'], [
+          new Block( 'move', 'fd', [100] ),
+          new Block( 'move', 'rt', [90] )
+        ] )
+      ] ),
+      new Block( 'operators', 'assign', ['x', 6] ),
+      new Block( 'control', 'if', [new Block('operators', 'is', ['x', 6])], [
+        new Block('move', 'bk', [100])
+      ]),
+      new Block( 'move', 'jumpto', [-100, -100] )
+    ]
+  },
+  '1-2-B': {
+    program: [
+      new Block('operators', 'assign', ['x', 2]),
+      new Block('operators', 'assign', ['y', 5]),
+      new Block('operators', 'funcdef', ['a', 'x'], [
+        new Block('operators', 'increment', ['x', 5])
+      ]),
+      new Block('operators', 'funcdef', ['b', 'x'], [
+        new Block('operators', 'increment', ['y', 6])
+      ]),
+      new Block('operators', 'funccall', ['a', 'x']),
+      new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('control', 'if', [new Block('control', 'and', [new Block( 'operators', 'is', ['x', 7] ), new Block('operators', 'is', ['y', 11])])],[
+          new Block('move', 'fd', [100]),
+        ]),
+        new Block('control', 'else', [], [
+          new Block('move', 'bk', [100])
+        ])
+      ]),
+      new Block('operators', 'funccall', ['f', 'x'])
+    ]
+  },
+  '1-2-C': {
+    program: [
+      new Block('operators', 'assign', ['x', 0]),
+      new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('control', 'while', [new Block('operators', 'lessthan', ['x', 10])], [
+          new Block('art', 'grow', [2.0]),
+          new Block('operators', 'increment', ['x', 9])
+        ])
+      ]),
+      new Block('operators', 'funcdef', ['g', 'x'], [
+        new Block('operators', 'funccall', ['f', 'x']),
+        new Block('move', 'rt', [180]),
+        new Block('move', 'fd', [100]),
+        new Block('move', 'lt', [90]),
+        new Block('move', 'fd', [100])
+      ]),
+      new Block('operators', 'funccall', ['g', 'x'])
+    ]
+  },
   '1-3-A': {
     program: [
       new Block( 'art', 'pen', ['green', 10] ),
@@ -677,6 +740,198 @@ var programs = {
       ]),
       new Block( 'move', 'rt', [90] ),
       new Block( 'move', 'fd', [50] )
+    ]
+  },
+  '1-3-B': {
+    program: [
+      new Block('operators', 'assign', ['x', 0]),
+      new Block('control', 'if', [new Block('operators', 'lessthan', ['x', 0])], [
+        new Block('move', 'bk', [100]),
+        new Block('operators', 'increment', ['x', 1]),
+        new Block('control', 'if', [new Block('operators', 'is', ['x', 1])], [
+          new Block('move', 'fd', [100])
+        ])
+      ]),
+      new Block('control', 'elseif', [new Block('operators', 'greaterthan', ['x', 0])], [
+        new Block('move', 'rt', [180, 100])
+      ]),
+      new Block('control', 'else', [], [
+        new Block('move', 'fd', [100]),
+        new Block('operators', 'increment', ['x', 2]),
+        new Block('control', 'if', [new Block('operators', 'is', ['x', 2])], [
+          new Block('move', 'lt', [90])
+        ])
+      ])
+    ]
+  },
+  '1-3-C': {
+    program: [
+      new Block('operators', 'assign', ['x', 5]),
+      new Block('operators', 'assign', ['y', 17]),
+      new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('operators', 'increment', ['x', 1]),
+        new Block('operators', 'increment', ['y', new Block('operators', 'add', ['x', 7])])
+      ]),
+      new Block('operators', 'funccall', ['f', 'x']),
+      new Block('control', 'if', [new Block('operators', 'greaterthan', ['x', 'y'])], [
+        new Block('art', 'wear', ['apple'])
+      ]),
+      new Block('control', 'else', [], [
+        new Block('art', 'wear', ['pear'])
+      ])
+    ]
+  },
+  '2-1-A': {
+    program: [
+      new Block('art', 'pen', ['purple', 10]),
+      new Block('move', 'rt', [30]),
+      new Block('control', 'for', ['[1..3]'], [
+        new Block('control', 'for', ['[1..3]'], [
+          new Block('move', 'fd', [100]),
+          new Block('move', 'rt', [120])
+        ]),
+        new Block('move', 'lt', [60])
+      ])
+    ]
+  },
+  '2-1-B': {
+    program: [
+      new Block('control', 'keydown', ['H'], [
+        new Block('operators', 'assign', ['x', 0]),
+        new Block('operators', 'funcdef', ['f', 'x'], [
+          new Block('art', 'wear', ['apple'])
+        ]),
+        new Block('operators', 'funccall', ['f', 'x'])
+      ]),
+      new Block('control', 'keydown', ['e'], [
+        new Block('operators', 'assign', ['x', 1]),
+        new Block('operators', 'funcdef', ['f', 'x'], [
+          new Block('art', 'wear', ['orange'])
+        ]),
+        new Block('operators', 'funccall', ['f', 'x'])
+      ]),
+      new Block('control', 'keydown', ['i'], [
+        new Block('operators', 'assign', ['x', 2]),
+        new Block('operators', 'funcdef', ['f', 'x'], [
+          new Block('art', 'wear', ['banana'])
+        ]),
+        new Block('operators', 'funccall', ['f', 'x'])
+      ])
+    ]
+  },
+  '2-1-C': {
+    program: [
+      new Block('art', 'pen', ['purple', 10]),
+      new Block('control', 'for', ['[1..4]'], [
+        new Block('move', 'rt', [90, 100])
+      ]),
+      new Block('move', 'fd', [100]),
+      new Block('control', 'for', '[1..4]', [
+        new Block('move', 'rt', [90]),
+        new Block('move', 'fd', [200])
+      ]),
+      new Block('move', 'rt', [45]),
+      new Block('move', 'fd', [200]),
+      new Block('move', 'rt', [90]),
+      new Block('move', 'fd', [140])
+    ]
+  },
+  '2-2-A': {
+    program: [
+      new Block('operators', 'assign', ['x', 4]),
+      new Block('operators', 'assign', ['y', 6]),
+      new Block('operators', 'assign', ['z', 10]),
+      new Block('control', 'while', [new Block('operators', 'and', [new Block('operators', 'lessthan', ['x', 8]),new Block('operators', 'lessthan', ['y', 11])])], [
+        new Block('control', 'if', [new Block('operators', 'is', ['z', 10])], [
+          new Block('art', 'grow', [3])
+        ]),
+        new Block('control', 'elseif', [new Block('operators', 'is', ['z', 9])], [
+          new Block('art', 'wear', ['apple'])
+        ]),
+        new Block('control', 'else', [], [
+          new Block('art', 'hide')
+        ]),
+        new Block('operators', 'increment', ['x', 2])
+      ])
+    ]
+  },
+  '2-2-B': {
+    program: [
+      new Block('art', 'pen', ['purple', 10]),
+      new Block('operators', 'assign', ['x', 60]),
+      new Block('control', 'for', ['[1..4]'], [
+        new Block('move', 'fd', [100]),
+        new Block('move', 'rt', ['x'])
+      ]),
+      new Block('move', 'bk', [100]),
+      new Block('move', 'lt', [90]),
+      new Block('control', 'for', ['[1..3]'], [
+        new Block('move', 'fd', [100]),
+        new Block('move', 'rt', ['x'])
+      ])
+    ]
+  },
+  '2-2-C': {
+    program: [
+      new Block('operators', 'assign', ['x', 5]),
+      new Block('control', 'while', [new Block('operators', 'lessthan', ['x', 7])], [
+        new Block('operators', 'funcdef', ['f', 'x'], [
+          new Block('move', 'fd', [5]),
+          new Block('move', 'rt', [90])
+        ]),
+        new Block('operators', 'funccall', ['f', 'x']),
+        new Block('operators', 'increment', ['x', 1])
+      ]),
+      new Block('control', 'if', [new Block('operators', 'is', ['x', 10])], [
+        new Block('move', 'rt', [360])
+      ])
+    ]
+  },
+  '2-3-A': {
+    program: [
+      new Block('art', 'pen', ['blue', 20]),
+      new Block('control', 'for', ['[1..3]'], [
+        new Block('move', 'rt', [120, 100])
+      ]),
+      new Block('art', 'fill', ['yellow']),
+      new Block('move', 'jumpto', [100, 50]),
+      new Block('art', 'dot', ['green', 50])
+    ]
+  },
+  '2-3-B': {
+    program: [
+      new Block('operators', 'assign', ['x', 5]),
+      new Block('control', 'if', [new Block('operators', 'lessthan', ['x', 0])], [
+        new Block('control', 'keydown', ['X'], [
+          new Block('art', 'show')
+        ])
+      ]),
+      new Block('control', 'elseif', [new Block('operators', 'is', ['x', 0])], [
+        new Block('control', 'keydown', ['X'], [
+          new Block('art', 'hide')
+        ])
+      ]),
+      new Block('control', 'else', [], [
+        new Block('art', 'cs')
+      ])
+    ]
+  },
+  '2-3-C': {
+    program: [
+      new Block('operators', 'assign', ['x', 2]),
+      new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('operators', 'assign', ['x', new Block('operators', 'multiply', ['x', 7])]),
+        new Block('control', 'if', [new Block('operators', 'is', ['x', 14])], [
+          new Block('art', 'wear', ['apple'])
+        ]),
+        new Block('control', 'elseif', [new Block('operators', 'is', ['x', 12])], [
+          new Block('art', 'wear', ['suit'])
+        ]),
+        new Block('control', 'else', [], [
+          new Block('art', 'wear', ['peach'])
+        ])
+      ]),
+      new Block('operators', 'funccall', ['f', 'x'])
     ]
   }
 };
