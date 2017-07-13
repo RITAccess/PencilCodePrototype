@@ -343,10 +343,10 @@ var sounds = {
       src: ['assets/SelectCategory_twonotehigh.m4a']
     }),
     nestingopening: new Howl({
-      src: ['assets/Nesting-Opening.mp3']
+      src: ['assets/nesting-opening-PAN.wav']
     }),
     nestingclosing: new Howl({
-      src: ['assets/Nesting-Closing.mp3']
+      src: ['assets/nesting-closing-PAN.wav']
     })
   },
   speech: {
@@ -988,7 +988,12 @@ Block.prototype.codify = function() {
     sonified_statement = sonify_statement( sonifyname, this.params, this.displayas, this.aural ) + ". " + this.desc;
     aria_hidden = '';
   }
-  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
+  var paramlist = '';
+  this.params.forEach(function( element ) {
+    paramlist += element + ',';
+  });
+  paramlist = paramlist.substring(0, paramlist.length - 1);
+  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
 }
 
 Block.prototype.codifyBasics = function() {
@@ -1071,6 +1076,7 @@ function codify_program( program, nesting ) {
     aria_hidden = '';
   }
   if ( nesting == 0 ) {
+    block_html_insert += '<li role="presentation" class="block jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection"><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection">Jump to program selection</p></li>';
     block_html_insert += '<div id="startofprogram" tabindex="' + ti++ + '" aria-label="Start of program"' + aria_hidden + '></div>';
   }
   for ( var i = 0; i < program.length; i++ ) {
@@ -1121,7 +1127,7 @@ function update_program_sequence( program_name ) {
   $("#program-sequence").html(block_html_insert);
 }
 
-function play( sound, name, override ) {
+function play( sound, name, override, params ) {
   var method = get_auditory_method();
   if ( override !== undefined ) {
     method = override;
@@ -1148,25 +1154,40 @@ function play( sound, name, override ) {
     }
   }
 
+  var whattoplay = null;
+
   if ( method == 'earcon' ) {
-    sounds['earcon'][sound].play();
+    whattoplay = sounds['earcon'][sound];
   } else if ( method == 'speech' ) {
     // if ( sound.indexOf('select') == -1 ) { // don't play when selecting
-      sounds['speech'][name].play();
+      whattoplay = sounds['speech'][name];
     // }
   } else if ( method == 'speechsynthesis' ) {
     var utterance = new SpeechSynthesisUtterance('This is a test! Hopefully it works.');
     ss.speak(utterance);
   } else if ( method == 'spearcon' ) {
     if ( override == 'spearcon' ) {
-      sounds['spearcon'][sound].play();
+      whattoplay = sounds['spearcon'][sound];
     } else {
       if ( sound == 'selectcategory' || sound == 'selectblock' ) {
-        sounds['spearcon']['selected'].play();
+        whattoplay = sounds['spearcon']['selected'];
       } else {
-        sounds['spearcon'][name].play();
+        whattoplay = sounds['spearcon'][name];
       }
     }
+  }
+
+  if ( method == 'earcon' || method == 'spearcon' || method == 'speech' ) {
+    whattoplay.play();
+    whattoplay.on('end', function() {
+      if ( method == 'spearcon' && params !== undefined ) {
+        params.forEach(function( element ) {
+          var utterance = new SpeechSynthesisUtterance( element );
+          utterance.lang = 'en-US';
+          ss.speak(utterance);
+        });
+      }
+    });
   }
 }
 
@@ -1270,7 +1291,9 @@ $("#program-sequence").on('focus', '.block', function( event ) {
   var blockidwherebegin = blockclasses.indexOf("block-[");
   var blockidwhereend = blockclasses.indexOf("]");
   var blockid = blockclasses.substring(blockidwherebegin + 7, blockidwhereend);
-  play('identifyblock', 'block-' + blockid);
+  var paramraw = $(this).attr('params');
+  var params = paramraw.split(',');
+  play('identifyblock', 'block-' + blockid, undefined, params);
   // play('identifyblock', null); // TODO: use this audible icon??
   $(':focus').parent().addClass('active');
 });
@@ -1382,6 +1405,10 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 //     }
 // };
 
+$("body").on('change', '#auditorydisplayslist', function( event ) {
+  update_program_sequence( $('#programlist option:selected').attr('id') );
+});
+
 $("body").on('change', '#programlist', function( event ) {
   update_program_sequence( $('#programlist option:selected').attr('id') );
 });
@@ -1392,4 +1419,14 @@ $("#program-sequence").on('focus', '#startofprogram', function( event ) {
 
 $("#program-sequence").on('focus', '#endofprogram', function( event ) {
   play('startofprogram', 'endofprogram');
+});
+
+$("#program-sequence").on('click', '#jumptoprogramselection', function( event ) {
+  document.getElementById('programlist').focus();
+});
+
+$("#program-sequence").on('keydown', '#jumptoprogramselection', function( event ) {
+  if ( event.keyCode === 13 ) { // keycode 13 = enter key
+    document.getElementById('programlist').focus();
+  }
 });
