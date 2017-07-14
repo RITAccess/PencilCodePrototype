@@ -990,11 +990,17 @@ Block.prototype.codify = function() {
   }
   var paramlist = '';
   this.params.forEach(function( element ) {
-    paramlist += element + ',';
+    var elemstring;
+    if ( typeof element == 'object' ) {
+      elemstring = sonify_statement( element.name, element.params, element.displayas, element.aural );
+    } else {
+      elemstring = element;
+    }
+    paramlist += elemstring + ',';
   });
   paramlist = paramlist.substring(0, paramlist.length - 1);
   var blockid = this.id || this.name;
-  return '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + blockid + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( blockid, this.params, this.displayas ) + '</p></li>';
+  return '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + blockid + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
 }
 
 Block.prototype.codifyBasics = function() {
@@ -1181,13 +1187,15 @@ function play( sound, name, override, params ) {
   if ( method == 'earcon' || method == 'spearcon' || method == 'speech' ) {
     // console.log( sound + ' ' + name );
     whattoplay.play();
+    var paramlengths = params.length || 0;
+    var paramsonifiedcount = 0;
     whattoplay.on('end', function() {
-      console.log(method);
-      if ( method == 'spearcon' && params !== undefined ) {
+      if ( method == 'spearcon' && params !== undefined && paramsonifiedcount < paramlengths ) {
         params.forEach(function( element ) {
           var utterance = new SpeechSynthesisUtterance( element );
           utterance.lang = 'en-US';
           ss.speak(utterance);
+          paramsonifiedcount++;
         });
       }
     });
