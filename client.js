@@ -1382,21 +1382,21 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 */
 
 $("#category-list").on('keydown', '.category', function( event ) {
-  if ( ( event.key === "/" || event.key === "?" || event.key === "z" ) && get_auditory_method() === 'earcon' ) {
+  if ( ( event.key === "/" || event.key === "?" || event.key === "'" ) && get_auditory_method() === 'earcon' ) {
     // console.log($(this).attr('id'));
     play('identifycategory', $(this).attr('id'), 'speech');
   }
 });
 
 $("#block-list").on('keydown', '.block', function( event ) {
-  if ( ( event.key === "/" || event.key === "?" || event.key === "z" ) && get_auditory_method() === 'earcon' ) {
+  if ( ( event.key === "/" || event.key === "?" || event.key === "'" ) && get_auditory_method() === 'earcon' ) {
     // console.log($(this).attr('class'));
     play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
   }
 });
 
 $("#program-sequence").on('keydown', '.block', function( event ) {
-  if ( ( event.key === "/" || event.key === "?" || event.key === "z" ) && get_auditory_method() === 'earcon' ) {
+  if ( ( event.key === "/" || event.key === "?" || event.key === "'" ) && get_auditory_method() === 'earcon' ) {
     var paramraw = $(this).attr('params');
     var params = paramraw.split(',');
     play('identifyblock', $(this).attr('class'), 'spearcon', params); // TODO: change back to speech and class -> id once we gain speech audio tracks
