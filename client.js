@@ -1187,18 +1187,22 @@ function play( sound, name, override, params ) {
   if ( method == 'earcon' || method == 'spearcon' || method == 'speech' ) {
     // console.log( sound + ' ' + name );
     whattoplay.play();
-    var paramlengths = params.length || 0;
-    var paramsonifiedcount = 0;
-    whattoplay.on('end', function() {
-      if ( method == 'spearcon' && params !== undefined && paramsonifiedcount < paramlengths ) {
-        params.forEach(function( element ) {
-          var utterance = new SpeechSynthesisUtterance( element );
-          utterance.lang = 'en-US';
-          ss.speak(utterance);
-          paramsonifiedcount++;
+    if ( params !== undefined ) {
+      var paramlengths = params.length || -1;
+      if ( paramlengths > 0 ) {
+        var paramsonifiedcount = 0;
+        whattoplay.on('end', function() {
+          if ( method == 'spearcon' && params !== undefined && paramsonifiedcount < paramlengths ) {
+            params.forEach(function( element ) {
+              var utterance = new SpeechSynthesisUtterance( element );
+              utterance.lang = 'en-US';
+              ss.speak(utterance);
+              paramsonifiedcount++;
+            });
+          }
         });
       }
-    });
+    }
   }
 }
 
