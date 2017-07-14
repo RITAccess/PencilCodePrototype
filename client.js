@@ -1384,18 +1384,14 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 $("#category-list").on('keydown', '.category', function( event ) {
   if ( ( event.key === "/" || event.key === "?" || event.key === "'" ) && get_auditory_method() === 'earcon' ) {
     // console.log($(this).attr('id'));
-    window.setTimeout(function() {
-      play('identifycategory', $(this).attr('id'), 'speech');
-    }, 1000);
+    play('identifycategory', $(this).attr('id'), 'speech');
   }
 });
 
 $("#block-list").on('keydown', '.block', function( event ) {
   if ( ( event.key === "/" || event.key === "?" || event.key === "'" ) && get_auditory_method() === 'earcon' ) {
     // console.log($(this).attr('class'));
-    window.setTimeout(function() {
-      play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
-    }, 1000);
+    play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
   }
 });
 
@@ -1406,9 +1402,7 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
     play('identifyblock', $(this).attr('class'), 'spearcon', params); // TODO: change back to speech and class -> id once we gain speech audio tracks
   } else if ( event.key === "." && get_auditory_method() === 'earcon' ) {
     // console.log( $(this).parent().attr('class') );
-    window.setTimeout(function() {
-      play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
-    }, 1000);
+    play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
   }
 });
 
