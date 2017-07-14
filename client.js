@@ -1180,6 +1180,7 @@ function play( sound, name, override, params ) {
   if ( method == 'earcon' || method == 'spearcon' || method == 'speech' ) {
     whattoplay.play();
     whattoplay.on('end', function() {
+      console.log(method);
       if ( method == 'spearcon' && params !== undefined ) {
         params.forEach(function( element ) {
           var utterance = new SpeechSynthesisUtterance( element );
@@ -1388,7 +1389,9 @@ $("#block-list").on('keydown', '.block', function( event ) {
 
 $("#program-sequence").on('keydown', '.block', function( event ) {
   if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
-    play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
+    var paramraw = $(this).attr('params');
+    var params = paramraw.split(',');
+    play('identifyblock', $(this).attr('class'), 'spearcon', params); // TODO: change back to speech and class -> id once we gain speech audio tracks
   } else if ( event.key === "." && get_auditory_method() === 'earcon' ) {
     console.log( $(this).parent().attr('class') );
     play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
