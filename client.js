@@ -993,7 +993,8 @@ Block.prototype.codify = function() {
     paramlist += element + ',';
   });
   paramlist = paramlist.substring(0, paramlist.length - 1);
-  return '<li role="presentation" class="block block-[' + this.name + ']" id="block-' + this.name + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
+  var blockid = this.id || this.name;
+  return '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + blockid + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( blockid, this.params, this.displayas ) + '</p></li>';
 }
 
 Block.prototype.codifyBasics = function() {
@@ -1141,7 +1142,7 @@ function play( sound, name, override, params ) {
       var index2 = name.indexOf( 'block-[' );
       var index3 = name.indexOf( ']' );
       var blockid = name.substring(index2 + 7, index3);
-      console.log( blockid );
+      // console.log( blockid );
       name = "block-" + blockid;
       override = null;
     } else if ( name.indexOf('nesting-') !== -1 ) {
@@ -1178,6 +1179,7 @@ function play( sound, name, override, params ) {
   }
 
   if ( method == 'earcon' || method == 'spearcon' || method == 'speech' ) {
+    // console.log( sound + ' ' + name );
     whattoplay.play();
     whattoplay.on('end', function() {
       console.log(method);
@@ -1233,10 +1235,8 @@ function selectcategory ( event, thisObj, focusOnBlock ) {
       window.setTimeout(function(){
         element.firstChild.focus();
       }, 0);
-      console.log(element);
-      console.log(element.firstChild);
-    } else {
-      console.log("Nope");
+      // console.log(element);
+      // console.log(element.firstChild);
     }
   });
 }
@@ -1374,26 +1374,26 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 */
 
 $("#category-list").on('keydown', '.category', function( event ) {
-  if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
-    console.log($(this).attr('id'));
+  if ( ( event.key === "/" || event.key === "?" ) && get_auditory_method() === 'earcon' ) {
+    // console.log($(this).attr('id'));
     play('identifycategory', $(this).attr('id'), 'speech');
   }
 });
 
 $("#block-list").on('keydown', '.block', function( event ) {
-  if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
-    console.log($(this).attr('class'));
+  if ( ( event.key === "/" || event.key === "?" ) && get_auditory_method() === 'earcon' ) {
+    // console.log($(this).attr('class'));
     play('identifyblock', $(this).attr('class'), 'spearcon'); // TODO: change back to speech and class -> id once we gain speech audio tracks
   }
 });
 
 $("#program-sequence").on('keydown', '.block', function( event ) {
-  if ( event.key === "/" && get_auditory_method() === 'earcon' ) {
+  if ( ( event.key === "/" || event.key === "?" ) && get_auditory_method() === 'earcon' ) {
     var paramraw = $(this).attr('params');
     var params = paramraw.split(',');
     play('identifyblock', $(this).attr('class'), 'spearcon', params); // TODO: change back to speech and class -> id once we gain speech audio tracks
   } else if ( event.key === "." && get_auditory_method() === 'earcon' ) {
-    console.log( $(this).parent().attr('class') );
+    // console.log( $(this).parent().attr('class') );
     play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
   }
 });
