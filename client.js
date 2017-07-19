@@ -1123,7 +1123,15 @@ function update_block_list( category_id_full ) {
     if ( blocks[i].id !== undefined ) {
       blockid = blocks[i].id;
     }
-    block_html_insert += '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + i + '" alt="' + blocks[i].desc + '"><p class="block-link" id="block-link-' + i + '" tabindex="' + ti++ + '" aria-label="' + blocks[i].desc + '">' + blocks[i].name + ' ' + params + '</p></li>';
+    var sonified_statement, aria_hidden;
+    if ( get_auditory_method() === 'spearcon' ) {
+      sonified_statement = '';
+      aria_hidden = ' aria-hidden="true"';
+    } else {
+      sonified_statement = blocks[i].desc;
+      aria_hidden = '';
+    }
+    block_html_insert += '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + i + '" alt="' + sonified_statement + '"><p class="block-link" id="block-link-' + i + '" tabindex="' + ti++ + '" aria-label="' + sonified_statement + '" ' + aria_hidden + '>' + blocks[i].name + ' ' + params + '</p></li>';
   }
   $("#block-list").html(block_html_insert);
 }
@@ -1421,6 +1429,34 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
 // };
 
 $("body").on('change', '#auditorydisplayslist', function( event ) {
+  var categories = document.getElementsByClassName('category');
+  // list zero items bug comes up with VoiceOver when we attempt to silence it on category list,
+  // so we'll temporarily disable this
+
+  // if ( get_auditory_method() == 'spearcon' ) {
+  //   [].forEach.call(categories, function( element ) {
+  //     $(element).attr('aria-hidden', 'true');
+  //     $(element).attr('aria-label', '');
+  //   });
+  // } else {
+  //   [].forEach.call(categories, function( element ) {
+  //     if ( $(element).attr('aria-hidden') == 'true' ) {
+  //       $(element).removeAttr('aria-hidden');
+  //       $(element).removeAttr('aria-label');
+  //     }
+  //   });
+  // }
+  var active_category_id;
+  [].forEach.call(categories, function( element ) {
+    var classnames = $(element).attr('class').split(' ');
+    classnames.forEach(function( classname ) {
+      if ( classname === 'category-active' ) {
+        active_category_id = element.id;
+      }
+    });
+    return false;
+  });
+  $(update_block_list( active_category_id ));
   update_program_sequence( $('#programlist option:selected').attr('id') );
 });
 
