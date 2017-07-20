@@ -168,7 +168,8 @@ var blocklist = {
      name: 'elseif',
      desc: 'If else statement. Do something if a condition is true, otherwise something else',
      id: 'elseif',
-     params: ['{}']
+     params: ['{}'],
+     aural: 'else if'
     }, {
      name: 'else',
      desc: 'If else statement. Do something if a condition is true, otherwise something else',
@@ -476,10 +477,13 @@ var sounds = {
       src: ['assets/Blocks/control/if.mp3']
     }),
     'block-forever': new Howl({
-      src: ['assets/Blocks/control/forever.mp3']
+      src: ['assets/Blocks/control/forever2.mp3']
+    }),
+    'block-elseif': new Howl({
+      src: ['assets/Blocks/control/elseif3.mp3']
     }),
     'block-else': new Howl({
-      src: ['assets/Blocks/control/ifelse.mp3']
+      src: ['assets/Blocks/control/else.mp3']
     }),
     'block-keydown': new Howl({
       src: ['assets/Blocks/control/keydown.mp3']
@@ -698,7 +702,7 @@ var programs = {
       ]),
       new Block('operators', 'funccall', ['a', 'x']),
       new Block('operators', 'funcdef', ['f', 'x'], [
-        new Block('control', 'if', [new Block('control', 'and', [new Block( 'operators', 'is', ['x', 7] ), new Block('operators', 'is', ['y', 11])])],[
+        new Block('control', 'if', [new Block('operators', 'and', [ new Block( 'operators', 'is', ['x', 7] ), new Block('operators', 'is', ['y', 11]) ] ) ],[
           new Block('move', 'fd', [100]),
         ]),
         new Block('control', 'else', [], [
@@ -1042,7 +1046,11 @@ function codify_params( params ) {
 }
 
 function sonify_statement( name, params, displayas, aural ) {
-  if ( displayas === 'binaryoperator' ) {
+  if ( name == 'function f defined as' ) { // funcdef
+    return 'define function \'' + params[0] + '\' of \'' + params[1] + '\'';
+  } else if ( name == 'f of x' ) { // funccall
+    return 'call function \'' + params[0] + '\' of \'' + params[1] + '\'';
+  } else if ( displayas === 'binaryoperator' ) {
     var param0sonify, param1sonify;
     if ( typeof params[0] === 'object' ) {
       // param0sonify = params[0].name + ' ' + sonify_params( params[0].params, params[0].displayas, params[0].aural );
@@ -1116,7 +1124,7 @@ function update_block_list( category_id_full ) {
   var blocks = [];
   var catnumtoname = ['move', 'art', 'text', 'sound', 'control', 'operators', 'sprites', 'snippets'];
   blocks = blocklist[catnumtoname[category_id - 1]];
-  block_html_insert += '<li role="presentation" class="back" id="back-' + category_id + '"><p class="block-link" aria-label="Go back" tabindex="' + ti++ + '">Go back</p></li>';
+  block_html_insert += '<li role="tab" class="back" id="back-' + category_id + '"><p class="block-link" aria-label="Go back" tabindex="' + ti++ + '">Go back</p></li>';
   for ( var i = 0; i < blocks.length; i++ ) {
     var params = codify_params( blocks[i].params );
     var blockid = blocks[i].name;
@@ -1128,10 +1136,10 @@ function update_block_list( category_id_full ) {
       sonified_statement = '';
       aria_hidden = ' aria-hidden="true"';
     } else {
-      sonified_statement = blocks[i].desc;
+      sonified_statement = blockid + params + '. ' + blocks[i].desc;
       aria_hidden = '';
     }
-    block_html_insert += '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + i + '" alt="' + sonified_statement + '"><p class="block-link" id="block-link-' + i + '" tabindex="' + ti++ + '" aria-label="' + sonified_statement + '" ' + aria_hidden + '>' + blocks[i].name + ' ' + params + '</p></li>';
+    block_html_insert += '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + i + '" alt="' + sonified_statement + '"><p class="block-link" role="tab" id="block-link-' + i + '" tabindex="' + ti++ + '" aria-label="' + sonified_statement + '" ' + aria_hidden + '>' + blocks[i].name + ' ' + params + '</p></li>';
   }
   $("#block-list").html(block_html_insert);
 }
@@ -1226,7 +1234,7 @@ $("#category-list").on('focus', '.category', function( event ) {
  * Derived from the Elephant codebase, also originally written by Jeffrey Wang
 */
 
-function selectcategory ( event, thisObj, focusOnBlock ) {
+function selectcategory( event, thisObj, focusOnBlock ) {
   play('selectcategory', thisObj.attr('id').substring(0,8) + "-link-" + thisObj.attr('id').substring(9));
   if ( !thisObj.hasClass("active") ) {
     $(".category").each(function(index, el) {
