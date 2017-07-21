@@ -24,3 +24,19 @@ var sounds = {
 function play( sound ) {
   sounds['earcon'][sound].play();
 }
+
+$('#a').click(function(){
+  play('identifycategory');
+});
+
+$('#b').click(function(){
+  play('identifyblock');
+});
+
+$('#c').click(function(){
+  play('selectcategory');
+});
+
+$('#d').click(function(){
+  play('selectblock');
+});
