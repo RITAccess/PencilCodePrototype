@@ -1091,7 +1091,7 @@ function codify_program( program, nesting ) {
     aria_hidden = '';
   }
   if ( nesting == 0 ) {
-    block_html_insert += '<li role="presentation" class="block jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection"><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection">Jump to program selection</p></li>';
+    block_html_insert += '<li role="presentation" class="block jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection"><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection dropdown">Jump to program selection dropdown</p></li>';
     block_html_insert += '<div id="startofprogram" tabindex="' + ti++ + '" aria-label="Start of program"' + aria_hidden + '></div>';
   }
   for ( var i = 0; i < program.length; i++ ) {
@@ -1487,5 +1487,16 @@ $("#program-sequence").on('click', '#jumptoprogramselection', function( event ) 
 $("#program-sequence").on('keydown', '#jumptoprogramselection', function( event ) {
   if ( event.keyCode === 13 ) { // keycode 13 = enter key
     document.getElementById('programlist').focus();
+  }
+});
+
+$("body").on('click', '#jumptocodenavigation', function( event ) {
+  var programseq = document.getElementById('program-sequence');
+  document.getElementById('startofprogram').focus();
+});
+
+$("body").on('keydown', '#jumptocodenavigation', function( event ) {
+  if ( event.keyCode === 13 ) { // keycode 13 = enter key
+    document.getElementById('startofprogram').focus();
   }
 });
