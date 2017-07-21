@@ -28,10 +28,10 @@
         <h2>Block selection - Exercise 1</h2>
         <p>Now you will hear a few earcons, or abstract sounds. Please match the earcon you feel best goes with one of the actions: identify category, select category, identify block, or select block. You can replay the earcons as many times as you want, but try and complete the task as quickly and accurately as possible.</p>
         <p>Please turn off your screen reader at this point. After you have tabbed through four buttons, turn your screen reader back on.</p>
-        <button class="btn btn-default" onclick="javascript:play('identifycategory')">Earcon A</button>
-        <button class="btn btn-default" onclick="javascript:play('identifyblock')">Earcon B</button>
-        <button class="btn btn-default" onclick="javascript:play('selectcategory')">Earcon C</button>
-        <button class="btn btn-default" onclick="javascript:play('selectblock')">Earcon D</button>
+        <button class="btn btn-default" id="a">Earcon A</button>
+        <button class="btn btn-default" id="b">Earcon B</button>
+        <button class="btn btn-default" id="c">Earcon C</button>
+        <button class="btn btn-default" id="d">Earcon D</button>
         <p>This concludes the earcon testing portion.</p>
         <h2>Proceed to the simulation webpage</h2>
         <p><a href="https://jeffw16.github.io/accessible-pencilcode-foundation/index.html">Simulation webpage</a>.</p>
@@ -45,10 +45,5 @@
   <!-- howler.js [2.0.4] (CDNJS) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.min.js"></script>
   <script src="client-tutorial.js"></script>
-  <script>
-    // show "Move" blocks on page load (jQuery.ready();)
-    $(update_block_list( 'category-1' ));
-    $(update_program_sequence( 'example' ));
-  </script>
 </body>
 </html>
