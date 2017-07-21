@@ -13,10 +13,10 @@ var sounds = {
       src: ['assets/SelectCategory_twonotehigh.m4a']
     }),
     nestingopening: new Howl({
-      src: ['assets/Nesting-Opening.mp3']
+      src: ['assets/nesting-opening-PAN.wav']
     }),
     nestingclosing: new Howl({
-      src: ['assets/Nesting-Closing.mp3']
+      src: ['assets/nesting-closing-PAN.wav']
     })
   }
 };
@@ -25,18 +25,26 @@ function play( sound ) {
   sounds['earcon'][sound].play();
 }
 
-$('#a').click(function(){
+$('#a').click(function() {
   play('identifycategory');
 });
 
-$('#b').click(function(){
+$('#b').click(function() {
   play('identifyblock');
 });
 
-$('#c').click(function(){
+$('#c').click(function() {
   play('selectcategory');
 });
 
-$('#d').click(function(){
+$('#d').click(function() {
   play('selectblock');
+});
+
+$('#nestopen').click(function() {
+  play('nestingopening');
+})
+
+$('#nestclose').click(function() {
+  play('nestingclosing');
 });
