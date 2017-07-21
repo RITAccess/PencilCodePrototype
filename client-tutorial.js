@@ -10,7 +10,7 @@ var sounds = {
       src: ['assets/IdentifyCategory.m4a']
     }),
     selectcategory: new Howl({
-      src: ['assets/SelectCategory_short.m4a']
+      src: ['assets/SelectCategory_twonotehigh.m4a']
     }),
     nestingopening: new Howl({
       src: ['assets/Nesting-Opening.mp3']
