@@ -649,12 +649,11 @@ var programs = {
         ])
       ]),
       new Block( 'control', 'else', [], [
-        new Block('control', 'for', ['1', '3'], [
+        new Block('control', 'for', ['1', '4'], [
           new Block('move', 'fd', [100]),
           new Block('move', 'rt', [90])
         ]),
-        new Block('move', 'lt', [90]),
-        new Block('move', 'rtarc', [180, 50])
+        new Block('move', 'lt', [90])
       ])
     ]
   },
@@ -1420,7 +1419,7 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
     var paramraw = $(this).attr('params');
     var params = paramraw.split(',');
     play('identifyblock', $(this).attr('class'), 'spearcon', params); // TODO: change back to speech and class -> id once we gain speech audio tracks
-  } else if ( event.key === "." && get_auditory_method() === 'earcon' ) {
+  } else if ( event.key === "." && ( get_auditory_method() === 'earcon' || get_auditory_method() === 'speech' ) ) {
     // console.log( $(this).parent().attr('class') );
     play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
   }
