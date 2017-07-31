@@ -652,8 +652,7 @@ var programs = {
         new Block('control', 'for', ['1', '4'], [
           new Block('move', 'fd', [100]),
           new Block('move', 'rt', [90])
-        ]),
-        new Block('move', 'lt', [90])
+        ])
       ])
     ]
   },
@@ -736,13 +735,12 @@ var programs = {
       new Block( 'control', 'forin', ['[1..4]'], [
         new Block( 'move', 'rtarc', [90, 50] )
       ]),
-      new Block( 'move', 'fd', [50] ),
-      new Block( 'control', 'forin', ['[1..3]'], [
+      new Block( 'move', 'jumpxy', [-100, -100] ),
+      new Block( 'control', 'forin', ['[1..4]'], [
         new Block( 'move', 'rt', [90] ),
         new Block( 'move', 'fd', [100] )
       ]),
-      new Block( 'move', 'rt', [90] ),
-      new Block( 'move', 'fd', [50] )
+      new Block( 'move', 'rt', [90] )
     ]
   },
   '1-3-B': {
@@ -801,24 +799,24 @@ var programs = {
     program: [
       new Block('control', 'keydown', ['H'], [
         new Block('operators', 'assign', ['x', 0]),
-        new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('operators', 'funcdef', ['f', 'a'], [
           new Block('art', 'wear', ['apple'])
         ]),
-        new Block('operators', 'funccall', ['f', 'x'])
+        new Block('operators', 'funccall', ['f', 'a'])
       ]),
       new Block('control', 'keydown', ['e'], [
         new Block('operators', 'assign', ['x', 1]),
-        new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('operators', 'funcdef', ['g', 'b'], [
           new Block('art', 'wear', ['orange'])
         ]),
-        new Block('operators', 'funccall', ['f', 'x'])
+        new Block('operators', 'funccall', ['g', 'b'])
       ]),
       new Block('control', 'keydown', ['i'], [
         new Block('operators', 'assign', ['x', 2]),
-        new Block('operators', 'funcdef', ['f', 'x'], [
+        new Block('operators', 'funcdef', ['h', 'c'], [
           new Block('art', 'wear', ['banana'])
         ]),
-        new Block('operators', 'funccall', ['f', 'x'])
+        new Block('operators', 'funccall', ['h', 'c'])
       ])
     ]
   },
