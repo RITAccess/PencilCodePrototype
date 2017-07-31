@@ -1001,7 +1001,7 @@ Block.prototype.codify = function() {
   });
   paramlist = paramlist.substring(0, paramlist.length - 1);
   var blockid = this.id || this.name;
-  return '<li role="presentation" class="block block-[' + blockid + ']" id="block-' + blockid + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
+  return '<li role="tab" class="block block-[' + blockid + ']" id="block-' + blockid + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
 }
 
 Block.prototype.codifyBasics = function() {
