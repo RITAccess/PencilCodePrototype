@@ -1088,19 +1088,19 @@ function codify_program( program, nesting ) {
     aria_hidden = '';
   }
   if ( nesting == 0 ) {
-    block_html_insert += '<li role="presentation" class="block jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection"><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection dropdown">Jump to program selection dropdown</p></li>';
-    block_html_insert += '<div id="startofprogram" tabindex="' + ti++ + '" aria-label="Start of program"' + aria_hidden + '></div>';
+    block_html_insert += '<li role="tab" class="blocklike jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection"><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection dropdown">Jump to program selection dropdown</p></li>';
+    block_html_insert += '<li role="tab" class="block"><p id="startofprogram" class="block-link" tabindex="' + ti++ + '" aria-label="Start of program"' + aria_hidden + '>Start of program</p></li>';
   }
   for ( var i = 0; i < program.length; i++ ) {
     block_html_insert += program[i].codify();
     if ( program[i]['statements'] !== null ) { // nesting
-      block_html_insert += '<div class="nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"' + aria_hidden + '></div><div class="nav nav-pills nav-stacked nestinglevel-' + (nesting + 1) + '"' + aria_hidden + '>';
+      block_html_insert += '<li role="tab" class="block"><p class="block-link nesting nesting-' + (nesting + 1) + '" aria-label="nesting open" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"' + aria_hidden + '>Nesting open</p></li><div class="nav nav-pills nav-stacked nestinglevel-' + (nesting + 1) + '"' + aria_hidden + '>';
       block_html_insert += codify_program( program[i]['statements'], nesting + 1 );
-      block_html_insert += '</div><div class="nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"' + aria_hidden + '></div>';
+      block_html_insert += '</div><li role="tab" class="block"><p class="block-link nestingend nestingend-' + (nesting + 1) + '" aria-label="close nesting" id="nesting-' + (nesting + 1) + '" tabindex="' + ti++ + '"' + aria_hidden + '>Close nesting</p></li>';
     }
   }
   if ( nesting == 0 ) {
-    block_html_insert += '<div id="endofprogram" tabindex="' + ti++ + '" aria-label="End of program"></div>';
+    block_html_insert += '<li role="tab" class="block"><p id="endofprogram" class="block-link" tabindex="' + ti++ + '" aria-label="End of program">End of program</p></li>';
   }
   return block_html_insert;
 }
@@ -1417,7 +1417,7 @@ $("#program-sequence").on('keydown', '.block', function( event ) {
     var paramraw = $(this).attr('params');
     var params = paramraw.split(',');
     play('identifyblock', $(this).attr('class'), 'spearcon', params); // TODO: change back to speech and class -> id once we gain speech audio tracks
-  } else if ( event.key === "." && ( get_auditory_method() === 'earcon' || get_auditory_method() === 'speech' ) ) {
+  } else if ( event.key === "." ) {
     // console.log( $(this).parent().attr('class') );
     play('nestinglevel', $(this).parent().attr('class'), 'spearcon');
   }
