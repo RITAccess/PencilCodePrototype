@@ -1088,7 +1088,7 @@ function codify_program( program, nesting ) {
     aria_hidden = '';
   }
   if ( nesting == 0 ) {
-    block_html_insert += '<li role="tab" class="blocklike jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection" ' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection dropdown">Jump to program selection dropdown</p></li>';
+    block_html_insert += '<li role="tab" class="blocklike jumptoprogramselection" id="jumptoprogramselection" alt="Jump to program selection"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="Jump to program selection dropdown">Jump to program selection dropdown</p></li>';
     block_html_insert += '<li role="tab" class="block" ' + aria_hidden + '><p id="startofprogram" class="block-link" tabindex="' + ti++ + '" aria-label="Start of program"' + aria_hidden + '>Start of program</p></li>';
   }
   for ( var i = 0; i < program.length; i++ ) {
