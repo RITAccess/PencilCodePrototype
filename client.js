@@ -4,8 +4,16 @@
 
 // ------- Data ------- \\
 
+// initialize browser's speech synthesis API for sonifying earcon and spearcon data
 var ss = window.speechSynthesis;
 
+// list of Pencil Code blocks, taken from Pencil Code's codebase
+// name: block's shortened name
+// desc: block description
+// id: unique identifier for block (for when blocks share the same shortened name)
+// params: default params displayed when enumerated in block selection module
+// aural: how it should be pronounced by screen reader
+// displayas: used for when the block should be displayed a special way (for instance, binary operators)
 var blocklist = {
   move: [
     {
@@ -329,6 +337,12 @@ var blocklist = {
   sprites: [],
   snippets: []
 };
+
+// Sounds
+// each sound is a Howler.js object, which is instantiated with a specific src to the sound file
+// sounds can be either earcons, speech (unused), or spearcons
+// sounds implemented in browser with Howler.js
+
 var sounds = {
   earcon: {
     identifyblock: new Howl({
@@ -610,6 +624,9 @@ var sounds = {
     })
   }
 };
+
+// Programs
+// sample programs we've made and loaded into the prototype for trial purposes
 
 var programs = {
   'example': {
@@ -937,10 +954,17 @@ var programs = {
   }
 };
 
+// ti is the global tab index counter
+// the tab index counter must be global to ensure the tab indices are unique and ordered sequentially
+// tabindex is an HTML attribute
+
 var ti = 10;
 
 // ------- Classes and prototypes ------- \\
 
+// Block
+// represents an individual block in OOP form
+// info is loaded in from the blocklist within this function automatically, given the block ID
 function Block( category, id, params, statements, desc ) {
   this.category = category;
   this.id = id;
@@ -975,6 +999,8 @@ function Block( category, id, params, statements, desc ) {
   }
 }
 
+// generates HTML code to display each block
+// kind of like the toString() function of the block "class"
 Block.prototype.codify = function() {
   var sonifyname = this.name;
   if ( this.aural !== undefined && this.aural !== null ) { // for screen reader auralization overrides
@@ -1004,6 +1030,7 @@ Block.prototype.codify = function() {
   return '<li role="tab" class="block block-[' + blockid + ']" id="block-' + blockid + '" params="' + paramlist + '" alt="' + this.desc + '"' + aria_hidden + '><p class="block-link" tabindex="' + ti++ + '" aria-label="' + sonified_statement + ' ">' + codify_statement( this.name, this.params, this.displayas ) + '</p></li>';
 }
 
+// used for nested or more complicated block inclusion
 Block.prototype.codifyBasics = function() {
   // return '(' + this.name + ': ' + codify_params( this.params ) + ')';
   return '(' + codify_statement( this.name, this.params, this.displayas ) + ')';
@@ -1011,6 +1038,7 @@ Block.prototype.codifyBasics = function() {
 
 // ------- Functions ------ \\
 
+// generates HTML for a statement
 function codify_statement( name, params, displayas ) {
   if ( displayas === 'binaryoperator' ) {
     var param0disp, param1disp;
@@ -1029,6 +1057,7 @@ function codify_statement( name, params, displayas ) {
   return name + ': ' + codify_params( params );
 }
 
+// generates HTML for displaying parameters of the block
 function codify_params( params ) {
   var paramcode = '';
   for ( var j = 0; j < params.length; j++ ) {
@@ -1042,6 +1071,8 @@ function codify_params( params ) {
   return paramcode;
 }
 
+// generates screen reader friendly HTML code for sonifying purposes
+// will be used in aria-labels
 function sonify_statement( name, params, displayas, aural ) {
   if ( name == 'function f defined as' ) { // funcdef
     return 'define function \'' + params[0] + '\' of \'' + params[1] + '\'';
@@ -1079,6 +1110,7 @@ function sonify_params( params, displayas, aural ) {
   return sonified;
 }
 
+// function used for coding entire program
 function codify_program( program, nesting ) {
   var block_html_insert = '';
   var aria_hidden;
@@ -1114,6 +1146,7 @@ function get_auditory_method() {
   update_program_sequence( $('#programlist option:selected').attr('id') );
 }
 
+// refreshing the list based on which category was selected
 function update_block_list( category_id_full ) {
   var category_id = Number(category_id_full.substring(9));
   ti = 10;
@@ -1141,12 +1174,14 @@ function update_block_list( category_id_full ) {
   $("#block-list").html(block_html_insert);
 }
 
+// updating the sequencing of tab indices
 function update_program_sequence( program_name ) {
   var program = programs[program_name]['program'];
   var block_html_insert = codify_program( program, 0, ti + 100 );
   $("#program-sequence").html(block_html_insert);
 }
 
+// plays sound
 function play( sound, name, override, params ) {
   var method = get_auditory_method();
   if ( override !== undefined ) {
@@ -1269,10 +1304,14 @@ function selectcategory( event, thisObj, focusOnBlock ) {
 // Event binding in pure JavaScript on dynamically created elements
 // https://stackoverflow.com/questions/203198/event-binding-on-dynamically-created-elements
 
+// CSS-related event binded functions
+// the following functions have to do with the visuals of the prototype
+
 function hasClass(elem, className) {
     return elem.className.split(' ').indexOf(className) > -1;
 }
 
+// allow click event to focus in as well
 document.addEventListener('click', function (e) {
     if (hasClass(e.target, 'block')) {
         e.focus();
@@ -1296,6 +1335,7 @@ $("#category-list").on('keydown', '.category', function( event ) {
   }
 });
 
+// adding CSS classes upon focus
 $("#block-list").on('focus', '.block', function( event ) {
   // do something on focus
   var blockclasses = $(this).attr("class");
